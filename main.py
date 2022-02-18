@@ -18,7 +18,7 @@ class Rules:
 		self.shape = 4          # options are 3,4,5,6 sides
 		self.pattern = 1        # 1= single layer, 2= double, 3= knight's move
 		self.min2live = 2
-		selfmax2live = 3
+		self.max2live = 3
 		self.min2spawn = 3
 		self.max2spawn = 3
 		
