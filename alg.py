@@ -156,29 +156,61 @@ def _pentagon(currentGeneration, i, j, rules.pattern):
 			else: 
 				count += currentGeneration[i][j+1]
 
-
-	''' Not correct yet!!! 
 	# Double layer of neighbors - total neighbors = 36
 	else if rules.pattern == 2: 
 		# Even Row 
 		if i % 2 == 0: 
-			count = sum(currentGeneration[i-1][j-1:j+1]) + 
-			        sum(currentGeneration[i][j-1:j+2])   + 
-			        sum(currentGeneration[i+1][j-1:j+1]) - 
+			count = sum(currentGeneration[i-3][j-1:j+1]) + 
+					sum(currentGeneration[i-2][j-1:j+2]) + 
+					sum(currentGeneration[i-1][j-2:j+2]) + 
+			        sum(currentGeneration[i][j-2:j+3])   + 
+			        sum(currentGeneration[i+1][j-2:j+2]) + 
+			        sum(currentGeneration[i+2][j-1:j+2]) + 
+			        sum(currentGeneration[i+3][j-1:j+1]) - 
 			        currentGeneration[i][j] 
 		# Odd Row 
 		else: 
-			count = sum(currentGeneration[i-2:i+3][j]) + 
-			        sum(currentGeneration[i-1:i+2][j+1]) - 
-			        sum(currentGeneration[i][j:j+2]) 
-			if (i % 4 ==1 and j % 2 == 0) or (i % 4 == 3 and j % 2 == 1):
-				count += currentGeneration[i][j-1] 
-			else: 
-				count += currentGeneration[i][j+1]
-	'''
+			count = currentGeneration[i-4][j]            +
+					sum(currentGeneration[i-3][j:j+2])   + 
+					sum(currentGeneration[i-2][j-1:j+2]) + 
+					sum(currentGeneration[i-1][j-1:j+3]) + 
+			        sum(currentGeneration[i][j-1:j+2])   + 
+			        sum(currentGeneration[i+1][j-1:j+3]) + 
+			        sum(currentGeneration[i+2][j-1:j+2]) + 
+			        sum(currentGeneration[i+3][j:j+2])   +
+			        currentGeneration[i+4][j]            - 
+			        currentGeneration[i][j] 
+	
 
 	# Knights move neighbors (sort of) - total neighbors = 15
 	else if rules.pattern == 3:
+		# Even Row 
+		if i % 2 == 0: 
+			count = sum(currentGeneration[i-3][j-1:j+1]) + 
+					sum(currentGeneration[i-2][j-1:j+2]) + 
+					currentGeneration[i-1][j-2] + currentGeneration[i-1][j+1] +
+			        currentGeneration[i][j-2]   + currentGeneration[i][j+2]   + 
+			        currentGeneration[i+1][j-2] + currentGeneration[i+1][j+1] +
+			        sum(currentGeneration[i+2][j-1:j+2]) + 
+			        sum(currentGeneration[i+3][j-1:j+1])
+			if (i % 4 == 0 and j % 2 == 1) or (i % 4 == 2 and j % 2 == 0): 
+			 	count = count - currentGeneration[i-2][j] 
+			else: 
+			 	count = count - currentGeneration[i+2][j]
+		# Odd Row 
+		else: 
+			count = currentGeneration[i-4][j]            +
+					sum(currentGeneration[i-3][j:j+2])   + 
+					currentGeneration[i-2][j-1] + currentGeneration[i-2][j+1] + 
+					currentGeneration[i-1][j-1] + currentGeneration[i-1][j+2] +
+			        currentGeneration[i+1][j-1] + currentGeneration[i+1][j+2] +
+			        currentGeneration[i+2][j-1] + currentGeneration[i+2][j+1] + 
+			        sum(currentGeneration[i+3][j:j+2])   +
+			        currentGeneration[i+4][j]            - 
+			if (i % 4 ==1 and j % 2 == 0) or (i % 4 == 3 and j % 2 == 1): 
+				count += currentGeneration[i][j+1] 
+			else: 
+				count += currentGeneration[i][j-1] 
 
 	#Undefined pattern
 	else: 
@@ -187,7 +219,7 @@ def _pentagon(currentGeneration, i, j, rules.pattern):
 		
 	return count
 
-def hexagon(currentGeneration, i, j, rules.pattern):
+def _hexagon(currentGeneration, i, j, rules.pattern):
 
 	# Single layer of neighbors - total neighbors = 6
 	if rules.pattern == 1: 
@@ -203,11 +235,43 @@ def hexagon(currentGeneration, i, j, rules.pattern):
 
 	# Double layer of neighbors - total neighbors = 18
 	else if rules.pattern == 2: 
-		count = 
+		count = sum(currentGeneration[i-1][j-2:j+3]) + 
+			    sum(currentGeneration[i][j-2:j+3])   + 
+			    sum(currentGeneration[i+1][j-2:j+3]) -
+			    currentGeneration[i][j] 
+		# Even Hexagon
+		if (i + j) % 2 == 0: 
+			count += sum(currentGeneration[i-2][j-1:j+2]) + 
+			         currentGeneration[i+2][j]
+		# Odd Hexagon
+		else: 
+			count += sum(currentGeneration[i+2][j-1:j+2]) + 
+			         currentGeneration[i-2][j]
 
-	# Knights move neighbors - total neighbors = 8
+	# Knights move neighbors - total neighbors = 18
 	else if rules.pattern == 3: 
-		count = 
+		count = sum(currentGeneration[i-2][j-2:j])   + 
+				sum(currentGeneration[i-2][j+1:j+3]) + 
+			    sum(currentGeneration[i][j-3:j+1])   + 
+			    sum(currentGeneration[i][j+2:j+4])   + 
+			    sum(currentGeneration[i+2][j-2:j])   + 
+			    sum(currentGeneration[i+2][j+1:j+3]) + 
+		# Even Hexagon
+		if (i + j) % 2 == 0: 
+			count += currentGeneration[i-3][j-1] + 
+					 currentGeneration[i+3][j+1] + 
+					 currentGeneration[i-1][j-3] + 
+					 currentGeneration[i-1][j+3] + 
+			         currentGeneration[i+1][j-1] + 
+			         currentGeneration[i+1][j+1] 
+		# Odd Hexagon
+		else: 
+			count += currentGeneration[i-2][j-1] + 
+			         currentGeneration[i-1][j+1] + 
+					 currentGeneration[i+1][j-3] + 
+					 currentGeneration[i+1][j+3] + 
+			         currentGeneration[i+3][j-1] + 
+			         currentGeneration[i+3][j+1] 
 
 	#Undefined pattern
 	else: 
