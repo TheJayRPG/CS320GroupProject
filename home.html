@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGOL Simulator</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <!--Desktop and mobile nav bars-->
+        <div class="wrapper">
+
+            <a class="home" href="home.html"> CGO<span>Life</span></a>
+            <img class="mobileOpen" id="openMenu" src="images/hamburger.svg" alt="Open menu">
+
+            <nav>
+                <img class="mobileExit" id="closeMenu" src="images/close.svg" alt="Close menu">
+                <ul class="navLeft" id="navLinks">
+                    <li class="curent"><a href="home.html">Home</a></li>
+
+                    <li><a href="#rulesSection">Rules</a></li>
+                    <li><a href="#contactSection">Contact</a></li>
+                </ul>
+
+                <ul class="navRight">
+                    <!--Jump to landing/login page-->
+                    <li class="item1"><a href="index.html">Log In</a></li>
+
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <section class="hero" id="intro">
+        <!--"Main title" block-->
+        <header role="banner">
+            <h1 class="topTitle">A Cellular <span>Automaton</span></h1>
+            <h2 class="botTitle">Customizable Cell Simulator<h2>
+        </header>
+
+        <div class="startButton">
+            <a href="#" class="ctaText">Start</a>
+        </div>
+
+        <div class="summary">
+            <p>Based on Conway's Game of Life; a simulator to visualize cellular evolution.</p>
+        </div>
+    </section>
+
+    <section class="simQualities">
+        <!--Bulleted list (w/arrowheads)-->
+        <div class="wrapper">
+            <ul class="qualityList">
+                <li>Cellular Evolution</li>
+                <li>User-Determined Rules</li>
+                <li>Turing Complete</li>
+                <li>Sentient Cells</li>
+                <li>Universal Constructor</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="mainRules" id="rulesSection">
+        <!--Game of Life explanation section-->
+        <div class="wrapper">
+            <h2>General Rules</h2>
+            <ol>
+                <li>
+                    <blockquote>Any live cell with two or three live neighbours survives.</blockquote>
+                </li>
+
+                <li>
+                    <blockquote>Any dead cell with three live neighbours becomes a live cell.</blockquote>
+                </li>
+
+                <li>
+                    <blockquote>All other live cells die in the next generation. All other dead cells stay
+                        dead.</blockquote>
+                </li>
+            </ol>
+
+            <br>
+            <h3>About the Game of Life and our version</h3>
+            <p>
+                The Game of Life is originally a zero-player game,
+                which meant the fate of cells was decided based on
+                the cells' starting states which the user configured.
+            </p>
+
+            <p>
+                We have here a simulation style game based on Conway’s Game of life,
+                built from scratch with customizable settings and rules.
+                Cells will follow a set of rules defined by the user.
+                The user will have the option to place cells and edit their behavior.
+            </p>
+
+
+        </div>
+    </section>
+
+    <section class="contactBlock" id="contactSection">
+        <div class="wrapper">
+            <div class="leftContact">
+                <h2>Contact Us</h2>
+
+                <form>
+                    <!--Contact form not functioning yet. Need backend to send email directly from website-->
+                    <!--"mailto" hyperlink is placeholder-->
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your name">
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Your email">
+
+                    <label for="message">Message</label>
+                    <textarea class="messageBox" name="message" id="message" cols="30" rows="10"
+                        placeholder="Say stuff"></textarea>
+
+                    <input type="submit" class="sendMessage" value="Send message">
+                    <br>
+                    <a class="substButton" href="mailto:leeric678@gmail.com?subject=Message From CGOL Site User">
+                        Send message via email(placeholder)</a>
+                </form>
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+        // mobileOpen and mobileExit icon functions thanks to https://youtu.be/D-h8L5hgW-w?t=6633
+        let mobileOpen = document.getElementById('openMenu')
+        mobileExit = document.getElementById('closeMenu')
+        mobileLink = document.getElementById('navLinks')
+        nav = document.querySelector('nav');
+
+        mobileOpen.addEventListener('click', () => { nav.classList.add('openMobNav'); })
+        mobileExit.addEventListener('click', () => { nav.classList.remove('openMobNav'); })
+        mobileLink.addEventListener('click', () => { nav.classList.remove('openMobNav'); })
+
+    </script>
+
+</body>
+
+</html>
