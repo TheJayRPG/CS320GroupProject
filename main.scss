@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
+:root {
+    --greenShade: #00a884;
+    --redShade: #dd163b;
+    --blueShade: #0693e3;
+}
+
+@keyframes transitionDown { //Animation for fading in page content
+    from {
+        opacity: 0;
+        transform: rotateX(-10deg);
+    }
+
+    to { 
+        opacity: 1;
+        transform: rotateX(0deg);
+    }
+ }
+
+
+body {
+    font-family: ubuntu;
+    margin: 0;
+    background-color: #1c202a;
+    color: white;
+
+    animation: 1.5s ease-out 0s 1 transitionDown; //Fade in content upon page loading
+}
+
+
+.navbar {
+    background: black;
+    padding: 1em;
+    
+    .home {
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 2em;
+        color: white;
+        line-height: 1.7em;
+
+        span {
+            color: var(--greenShade);
+        }
+    }
+
+    nav { //Don't display mobile nav bar when not in mobile resolution
+        display: none;
+    }
+    
+    .wrapper {
+        display: flex;
+        place-content: space-between;
+    }
+
+    .mobileOpen { //Hamburger symbol
+        cursor: pointer; //changes cursor to a hand
+
+        //Recolor hamburger.svg to white
+        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+
+        &:hover { //Recolor to red when hovering
+            filter: invert(20%) sepia(96%) saturate(5273%) hue-rotate(341deg) brightness(88%) contrast(95%); 
+        }
+    }
+
+    .mobileExit { //'X' symbol
+        cursor: pointer;
+
+        //Position to the right of mobile nav bar
+        float: right;
+        margin: 0.5em;
+
+        &:hover { //Recolor to red when hovering
+            filter: invert(60%) sepia(96%) saturate(5273%) hue-rotate(341deg) brightness(88%) contrast(95%); 
+        }
+    }
+}
+
+a { //All links 
+    text-decoration: none; //Remove underline 
+    color: var(--blueShade);
+}
+
+ul {
+    list-style-type: none; //Remove bullet points
+    margin: 0;
+    padding: 0;
+}
+
+section { //Space out all sections
+    padding: 5em;
+}
+
+.hero {
+    text-align: center; //Position main block (aka hero)
+
+    .topTitle {
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .botTitle {
+        font-size: 2.75em;
+        line-height: 1.4em; //distance between top and bot title
+    }
+
+    .startButton {
+        background: var(--redShade);
+        padding: 0.7em;
+        border-radius: 0.5em;
+        display: inline-block; //Center the button
+        width: 11em;
+        
+        .ctaText {
+            color: white;
+            font-size: 1.4em;
+            letter-spacing: 0.05em;
+
+            &:hover {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+ul.qualityList {
+    margin: 0;
+    padding-left: 1.5em;
+    display: grid;
+
+    li {
+        font-size: 1.3em;
+        margin-bottom: 0.75em;
+        margin-left: 2em;
+        position: relative;
+
+        &:before { //Insert arrowheads before texts
+            content: '';
+            position: absolute;
+            left: -2.5em;
+            width: 1em;
+            height: 1em;
+            
+            //change arrowhead color to white
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) 
+                    brightness(103%) contrast(103%) url('../images/arrowhead.svg'); 
+                    
+            background-image: url('../images/arrowhead.svg');
+            background-size: contain;
+        }
+    }
+}
+
+
+.mainRules {
+   background-color: #1c202a;
+   position: relative;
+   z-index: 1;
+
+   .mainRules li { //Style rules
+    font-size: 1.3em;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 1em;
+   }
+}
+
+.mainRules::before { //Apply background behind only mainRules section
+  content: " ";
+  position: absolute;
+  z-index: -1; //z-index lower so it goes behind
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;  
+  opacity: 0.6; 
+
+  background-image: url(../images/bg_home.jpg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+
+h2 { //"General Rules" title
+    font-size: 2em;
+}
+
+label { //Contact block
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+input, textarea { //Position and style input boxes
+    width: 100%;
+    padding: 0.8em;
+    margin-bottom: 1em;
+    border-radius: 0.3em;
+    box-sizing: border-box;
+}
+
+.sendMessage { 
+    background-color: var(--redShade);
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 1.3em;
+    border-radius: 0.5em; //Curve corners
+    border: none; //Remove border on the button
+    display: inline-block;
+    padding: 1em;
+    width: 15em;
+    cursor: pointer;
+
+    &:hover { //When hovering over "Send Message"
+        background-color: white;
+        color: var(--redShade);
+    }
+}
+
+.substButton { //Placeholder link (below "Send Message")
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+@keyframes fadeIn { //Animation for mobile nav bar
+    from {opacity: 0%;}
+    to {opacity: 100%;}
+}
+
+nav.openMobNav {
+    display: block;
+    animation: 0.5s ease-out 0s 1 fadeIn; //Apply fadeIn
+}
+
+nav { //Mobile nav bar
+    position: fixed;
+    z-index: 100;
+    width: 45%;
+    right: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    height: 100%;
+    padding: 1em;
+
+    ul.navLeft {
+        margin-top: 3.5em;
+    }
+
+    li { 
+        a { //nav bar links
+            color: white;
+            font-size: 1.4em;
+            text-decoration: none;
+            display: block;
+            padding: 0.75em;
+            text-align: right;
+
+            &:hover {
+                font-weight: bold;
+                color: var(--redShade);
+            }
+        }
+    }
+}
+
+
+@media only screen and (min-width: 640px) { //Apply these only if resolution is >=640px
+
+    .mobileOpen, .mobileExit { // Hide mobile icons
+        display: none;
+    }
+
+    .navbar .wrapper {
+        display: grid;
+        grid-template-columns: 11em auto;
+        justify-content: unset; //Keep leftContact on the left
+    }
+
+    .navbar nav {
+        background: none;
+        display: flex;
+        justify-content: space-between; //Keep rightContact on the right
+        position: relative; //Prevent overlap with title
+        
+        width: 100%;
+        padding: 0;
+
+        ul {
+            display: flex;
+        }
+
+        ul.navLeft {
+            margin: 0;
+        }
+
+        li.current a {
+            font-weight: bold;
+        }
+    }
+}
+
+@media only screen and (min-width: 1080px) { // Apply only if resolution is >=1080px
+   
+    .contactBlock {
+        .wrapper {
+            display: flex; //Prevent input boxes from expanding
+            
+        }
+    }
+}
