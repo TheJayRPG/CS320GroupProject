@@ -1,18 +1,8 @@
 # Alexander Hong
 # CS 320
 # Experimental Grid
-
 import time
 import random
-
-class Test():
-    def __init__(self, a, b):
-        self.x = a
-        self.y = b
-
-    def show(self):
-        print(self.x)
-        print(self.y)
 
 class Cell():
     def __init__(self, xpos, ypos, alive):
@@ -42,13 +32,24 @@ class CellGrid():
                 print(str(self.grid[i][j].a) + "|", end = '')
             print()
 
-def main():
-    width = input("Enter grid width: ")
-    height = input("Enter grid height ")
+def dimConfirm(dim):
+    result = dim
+    while 1:
+        try:
+            result = int(dim)
+            break
+        except:
+            dim = input("Enter a valid dimension: ")
+    return result
 
-    test = CellGrid(width, height)
-    test.printGrid()
-    while True:
+def main():
+    width = dimConfirm(input("Enter grid width: "))
+    height = dimConfirm(input("Enter grid height: "))
+
+    cGrid = CellGrid(width, height)
+    cGrid.printGrid()
+    
+    while 1:
         inp = input("Enter input: ")
         print(inp)
         if inp == "end":
