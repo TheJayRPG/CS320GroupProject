@@ -1,6 +1,7 @@
 # Alexander Hong
 # CS 320
 # Experimental Grid
+
 import time
 import random
 
@@ -9,6 +10,12 @@ class Cell():
         self.x = xpos
         self.y = ypos
         self.a = alive
+
+    def cellToggle(self):
+        if self.a == 1:
+            self.a = 0
+        else:
+            self.a = 1
 
 class CellGrid():
     def __init__(self, width, height):
@@ -32,27 +39,28 @@ class CellGrid():
                 print(str(self.grid[i][j].a) + "|", end = '')
             print()
 
-def dimConfirm(dim):
-    result = dim
+def intValid(dim):
+    result = 0
     while 1:
         try:
             result = int(dim)
-            break
+            if result > 0:
+                break
         except:
-            dim = input("Enter a valid dimension: ")
+            pass
+        dim = input("Enter a valid integer: ")
     return result
 
 def main():
-    width = dimConfirm(input("Enter grid width: "))
-    height = dimConfirm(input("Enter grid height: "))
-
+    width = intValid(input("Enter grid width: "))
+    height = intValid(input("Enter grid height: "))
     cGrid = CellGrid(width, height)
     cGrid.printGrid()
-    
+
     while 1:
-        inp = input("Enter input: ")
-        print(inp)
-        if inp == "end":
+        print("Commands: quit")
+        inp = input("Enter command: ")
+        if inp == "quit":
             break
 
 if __name__=='__main__':
