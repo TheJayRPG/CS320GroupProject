@@ -10,6 +10,20 @@ function loadFile(filePath) {       //https://stackoverflow.com/questions/369219
     return result;
 }
 
+function requestTiles(minX, minY, maxX, maxY) {
+    return [
+        [0,1,1,1,1,  0,1,1,1,1],
+        [0,1,1,1,1,  0,1,1,1,0],
+        [0,1,0,1,1,  0,1,1,1,1],
+        [0,1,1,1,1,  0,1,1,1,1],
+        [0,1,1,1,1,  0,1,1,1,1],
+        [0,1,1,1,1,  0,1,1,1,1],
+        [0,1,1,0,1,  0,1,1,1,1],
+        [0,1,1,1,1,  0,1,1,1,1],
+        [0,1,1,1,1,  0,1,0,1,1],
+        [0,1,1,1,1,  0,1,1,1,1],
+    ];
+}
 
 const GRIDTYPE = { 
     SQUARE: {
@@ -63,7 +77,7 @@ const GRIDTYPE = {
             const border = 0;
             const format = gl.LUMINANCE;
             const fType = gl.UNSIGNED_BYTE;
-            const data = new Uint8Array(tileState.flat());
+            const data = new Uint8Array(tileState.flat().map((x)=>255*x));
             //alert(data.length);
             gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border,
                 format, fType, data);
