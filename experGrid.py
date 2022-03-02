@@ -5,17 +5,23 @@
 import time
 import random
 
+class Rule():
+    def __init__(self, range, most, least):
+        self.r = 1
+        self.m = 3
+        self.l = 2
+
 class Cell():
-    def __init__(self, xpos, ypos, alive):
+    def __init__(self, xpos, ypos, status):
         self.x = xpos
         self.y = ypos
-        self.a = alive
+        self.s = status
 
     def cellToggle(self):
-        if self.a == 1:
-            self.a = 0
+        if self.s == 1:
+            self.s = 0
         else:
-            self.a = 1
+            self.s = 1
 
 class CellGrid():
     def __init__(self, width, height):
@@ -36,8 +42,18 @@ class CellGrid():
         for i in range(self.h):
             print("|", end = '')
             for j in range(self.w):
-                print(str(self.grid[i][j].a) + "|", end = '')
+                if self.grid[i][j].s == 0:
+                    print("_|", end = '')
+                else:
+                    print("0|", end = '')
             print()
+
+    def randomGrid(self, prob):
+        for i in range(self.h):
+            for j in range(self.w):
+                chance = random.choice(range(100))
+                if chance < prob:
+                    self.grid[i][j].s = 1
 
 def intValid(dim):
     result = 0
@@ -51,16 +67,22 @@ def intValid(dim):
         dim = input("Enter a valid integer: ")
     return result
 
+def comInput():
+    pass
+
 def main():
     width = intValid(input("Enter grid width: "))
     height = intValid(input("Enter grid height: "))
     cGrid = CellGrid(width, height)
+
+    cGrid.randomGrid(40)
+
     cGrid.printGrid()
 
     while 1:
-        print("Commands: quit")
+        print("Commands: quit|q, ")
         inp = input("Enter command: ")
-        if inp == "quit":
+        if inp == "quit" or inp == "q":
             break
 
 if __name__=='__main__':
