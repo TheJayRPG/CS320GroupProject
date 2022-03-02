@@ -76,12 +76,13 @@ class CellGrid():
     def randomGrid(self, prob):
         for y in range(self.h):
             for x in range(self.w):
-                chance = random.choice(range(100))
-                if chance < prob:
+                chance = random.choice(range(1, 101))
+                if chance <= prob:
                     self.grid[y][x].s = 1
 
     # Updates all the cells on a grid in accordance to a rule
     def updateGrid(self, rule):
+        temp = CellGrid(self.w, self.h)
         for y in range(self.h):
             for x in range(self.w):
                 nearby = 0
@@ -93,18 +94,19 @@ class CellGrid():
                             if x + i < self.w:
                                 if self.grid[y + j][x + i].s == 1:
                                     nearby += 1
-                            if x - i < self.w:
+                            if x - i > -1 and i > 0:
                                 if self.grid[y + j][x - i].s == 1:
                                     nearby += 1
                         if y - j > -1:
-                            if x + i < self.w and i > 0 and j > 0:
+                            if x + i < self.w and j > 0:
                                 if self.grid[y - j][x + i].s == 1:
                                     nearby += 1
-                            if x - i < self.w and i > 0 and j > 0:
+                            if x - i > -1 and i > 0 and j > 0:
                                 if self.grid[y - j][x - i].s == 1:
                                     nearby += 1
-                print("|" + str(nearby), end = '')
-            print()
+                if nearby <= rule.m and nearby >= rule.l:
+                        temp.grid[y][x].s = 1
+        self.grid = temp.grid
 
 # Determines if a given input is a valid integer
 def intValid(dim):
@@ -119,9 +121,35 @@ def intValid(dim):
         dim = input("Enter a valid integer: ")
     return result
 
-# Not yet utilized
-def comInput():
-    pass
+# Determines input commands
+def comInput(grid, rule):
+    print("Commands: quit|q, next|n, rand|r, ")
+    inp = input("Enter command: ")
+
+    if inp == "next" or inp == "n":
+        grid.updateGrid(rule)
+        grid.printGrid()
+        print()
+        return grid
+
+    if inp == "rand" or inp == "r":
+        print("Probability of life needed...")
+        prob = 0
+        while 1:
+            prob = input("Enter an integer between 0 and 100: ")
+            prob = intValid(prob)
+            if prob >= 0 and prob <= 100:
+                break
+        grid.randomGrid(prob)
+        grid.printGrid()
+        print()
+        return grid
+
+    if inp == "quit" or inp == "q":
+        return 0
+
+    else:
+        return -1
 
 # Currently performs a series of test functions:
 # Prompts the user for grid dimensions
@@ -133,18 +161,15 @@ def main():
     height = intValid(input("Enter grid height: "))
     cGrid = CellGrid(width, height)
 
-    cGrid.randomGrid(20)
     cGrid.printGrid()
-
+    print()
     testRule = Rule(1, 3, 2)
 
-    cGrid.updateGrid(testRule)
-
     while 1:
-        print("Commands: quit|q, ")
-        inp = input("Enter command: ")
-        if inp == "quit" or inp == "q":
+        inp = comInput(cGrid, testRule)
+        if type(inp) == int and inp == 0:
             break
+
 
 if __name__=='__main__':
     main()
