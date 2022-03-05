@@ -10,20 +10,7 @@ function loadFile(filePath) {       //https://stackoverflow.com/questions/369219
     return result;
 }
 
-function requestTiles(minX, minY, maxX, maxY) {
-    return [
-        [0,1,1,1,1,  0,1,1,1,1],
-        [0,1,1,1,1,  0,1,1,1,0],
-        [0,1,0,1,1,  0,1,1,1,1],
-        [0,1,1,1,1,  0,1,1,1,1],
-        [0,1,1,1,1,  0,1,1,1,1],
-        [0,1,1,1,1,  0,1,1,1,1],
-        [0,1,1,0,1,  0,1,1,1,1],
-        [0,1,1,1,1,  0,1,1,1,1],
-        [0,1,1,1,1,  0,1,0,1,1],
-        [0,1,1,1,1,  0,1,1,1,1],
-    ];
-}
+
 
 const GRIDTYPE = { 
     SQUARE: {
@@ -70,6 +57,8 @@ const GRIDTYPE = {
             //START: https://webglfundamentals.org/webgl/lessons/webgl-data-textures.html
             //let tileState = _thisArg.getTiles();    
             let tileState = _thisArg.getTiles();
+            //alert(_thisArg.rangeX * _thisArg.rangeY);
+            //alert(tileState.flat().length);
             const level = 0;
             const internalFormat = gl.LUMINANCE;
             const width = _thisArg.rangeX;
@@ -206,10 +195,10 @@ class ConwayDrawer {
         this.gridType = gridType;
         this.maxX = sizeX;
         this.posX = 0;
-        this.rangeX = 10;
+        this.rangeX = rangeX;
         this.maxY = sizeY;
         this.posY = 0;
-        this.rangeY = 10;
+        this.rangeY = rangeY;
         this.netTime = 0;
         this._maskDraw = false;
         this._setupGL();
@@ -217,9 +206,19 @@ class ConwayDrawer {
     }
     moveWindow(offX, offY) {
         this.posX += offX;
+        this.posX %= this.maxX;
         this.posY += offY;
+        this.posY %= this.maxY;
+    }
+    setMoveWindow(offX, offY) {
+        this.posX = offX;
+        this.posY = offY;
     }
     scaleWindow(sFac) {
+        this.rangeX += sFac;
+        this.rangeY += sFac;
+    }
+    setScaleWindow(sFac) {
         this.rangeX = sFac;
         this.rangeY = sFac;
     }
@@ -232,26 +231,26 @@ class ConwayDrawer {
     }
 
     _copy4ArraysTo1(arr1, arr2, arr3, arr4) {
-        let retArray = [...Array(rangeX)].map(e => Array(rangeY));
         const maxX = this.maxX;
         const maxY = this.maxY;
         const rangeX = this.rangeX;
         const rangeY = this.rangeY;
         const posX = this.posX;
         const posY = this.posY;
+        let retArray = [...Array(rangeY)].map(e => Array(rangeX));
         for(let x = 0; x < rangeX; x++) {
             for(let y = 0; y < rangeY; y++) {
-                if(y > (maxY - posY) ) {
-                    if(x > (maxX - posX) ) {
-                        retArray[x][y] = arr4[x - maxX + posX][y - maxY + posY];
+                if(y >= (maxY - posY) ) {
+                    if(x >= (maxX - posX) ) {
+                        retArray[y][x] = arr4[y - maxY + posY][x - maxX + posX];
                     } else {
-                        retArray[x][y] = arr2[x][y - maxY + posY];
+                        retArray[y][x] = arr2[y - maxY + posY][x];
                     }
                 } else {
-                    if(x > (maxX - posX) ) {
-                        retArray[x][y] = arr3[x - maxX + posX][y];
+                    if(x >= (maxX - posX) ) {
+                        retArray[y][x] = arr3[y][x - maxX + posX];
                     } else {
-                        retArray[x][y] = arr1[x][y];
+                        retArray[y][x] = arr1[y][x];
                     }
                 }
             }
@@ -262,6 +261,7 @@ class ConwayDrawer {
     getTiles() {
         const maxX = this.maxX;
         const maxY = this.maxY;
+        
         const rangeX = this.rangeX;
         const rangeY = this.rangeY;
         const posX = this.posX;
@@ -284,7 +284,7 @@ class ConwayDrawer {
                 let arr2 = requestTiles(posX,    0,          posX + rangeX, (posY + rangeY) % maxY);
                 return this._copy4ArraysTo1(arr1,arr2,null,null);
             } else {
-                return requestTiles(posX, posY,          posX + rangeX,          posX + rangeX);
+                return requestTiles(posX, posY,          posX + rangeX,          posY + rangeY);
             }
         }
     }

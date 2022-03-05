@@ -7,7 +7,7 @@ describe("pow", function() {
 });
 
 describe("draw", function() {
-    let EmptyDrawer = new ConwayDrawer(1000,1000, GRIDTYPE.SQUARE, 10, 10);
+    let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
     let runsArr = [];
     const runCount = 100;
     const runMaxTime = 5;
@@ -23,27 +23,53 @@ describe("draw", function() {
 
 
 describe("request", function() {
-    let EmptyDrawer = new ConwayDrawer(1000,1000, GRIDTYPE.SQUARE, 10, 10);
-    EmptyDrawer.draw(0);
-    let gl = EmptyDrawer._gl;
-    let pixels = new Uint8Array(4);
-    let aliveArr = new Array();
-    let tileSet = requestTiles().flat();
-    for(let x = 0; x < EmptyDrawer.rangeX; x++) {
+    let EmptyDrawer;
+    function drawCommon() {
+        EmptyDrawer.draw(0);
+        let gl = EmptyDrawer._gl;
+        let pixels = new Uint8Array(4);
+        let aliveArr = new Array();
+        let tileSet = EmptyDrawer.getTiles().flat();
+        
+
         for(let y = 0; y < EmptyDrawer.rangeY; y++) {
-            gl.readPixels(400 / EmptyDrawer.rangeY * y, 400 / EmptyDrawer.rangeX * x, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-            aliveArr.push(pixels[0]);
-            //console.log(aliveArr.pop());
-            //aliveArr.push(pixels[0]);
+            for(let x = 0; x < EmptyDrawer.rangeX; x++) {
+                //gl.readPixels(400 / EmptyDrawer.rangeX * x, 400 / EmptyDrawer.rangeY * y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+                gl.readPixels(400 * x / EmptyDrawer.rangeX + 1, 400 * y / EmptyDrawer.rangeY + 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+                aliveArr.push(pixels[0]/255);
+                //console.log(tileSet.pop());
+                //aliveArr.push(pixels[0]);
+            }
         }
-    }
-    it(`All pixels are correct`, function() {
+        //alert(tileSet);
+        //alert(aliveArr);
         for(let i = 0; i < EmptyDrawer.rangeX * EmptyDrawer.rangeY; i++) {
-            if(tileSet[i] != (aliveArr[i] / 255) ) {
-                console.log(`${i} ${tileSet[i]} ${aliveArr[i] / 255}`);
+            if(tileSet[i] != (aliveArr[i]) ) {
+                console.log(`${i} ${tileSet[i]} ${aliveArr[i]}`);
                 assert(false);
             }
         }
         assert(true);
+    }
+    it("Case where selection within grid", function() {
+        EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        drawCommon();
+    });
+    it("Case where selection passes xMax", function() {
+        EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        EmptyDrawer.setMoveWindow(95,0);
+        drawCommon();
+    });
+    it("Case where selection passes yMax", function() {
+        EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        EmptyDrawer.setMoveWindow(0,95);
+        drawCommon();
+    });
+    it("Case where selection passes xMax and yMax", function() {
+        EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        EmptyDrawer.setMoveWindow(95,95);
+        drawCommon();
     });
 });
+
+
