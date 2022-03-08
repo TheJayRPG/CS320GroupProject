@@ -1,66 +1,19 @@
+''' *********************************************************************** '''
+''' Custom Conway's Game of Life                                            '''
+''' Algorithms                                                              '''
+''' *********************************************************************** '''
+
+from main import ROWS, COLUMNS, Status, Cell, Rules
 from math import floor
 from random import randint
 
-''' global variables/ Macros '''
-''' defined for simplicity in changing attributes used throughout program '''
-ROWS = 20
-COLUMNS = 20
-
-''' Class holding rules for current game '''
-''' Populated by API, used by all '''
-''' Default rules for "square cells" set initially '''
-class GameRules:
-    
-	def __init__(self, ROWS, COLUMNS, shape = 4, pattern = 1, min2live = 2,
-	    max2live = 3, min2spawn = 3, max2spawn = 3):
-	    # If no values given default values will be used
-		self.rows = ROWS
-		self.columns = COLUMNS
-		self.shape = shape            # options are 3,4,5,6 sides
-		self.pattern = pattern        # 1= single layer, 2= double, 3= knight's move
-		self.min2live = min2live
-		self.max2live = max2live
-		self.min2spawn = min2spawn
-		self.max2spawn = max2spawn
-				
-rules = GameRules(ROWS, COLUMNS)
-		
-''' Class holding cell statistics '''
-''' Populated by Algorithms, used by ThoughtProcess and to print '''
-''' Held in 2D array cellStats[row][column] '''
-class Cell:
-	#def __init__(self, neighbors, past, generations, living, dea):
-	neighbors = 0
-	past = []          # list to hold last 30 cell states
-	generations = 0
-	living = 0
-	dead = 0
-				
-#cellStats = [ [Cell()] * COLUMNS for _ in range(ROWS)]
-cellStats = [[ Cell() for j in range(COLUMNS)] for _ in range(ROWS)]
-
-''' Class to hold 2D array of currentGeneration '''
-''' Initially populated by API when program in "stop state" '''
-''' While running Algorithm creates nextGeneration cell state
-    then updates currentGeneration with new data '''
-class Status():
-	#def __init__(self, i, j):
-	#i = ROWS
-	#j = COLUMNS
-	status = 0
-	
-# All cells initially dead
-#currentGeneration = [ [Status()] * COLUMNS for _ in range(ROWS)]
-currentGeneration = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
-newGen = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
-
 # Return nextGen of cells and update cellStats array with info abour the
 # new generation
-class UpdateFunction(Status, Cell, GameRules):
+class UpdateFunction(Status, Cell, Rules):
 	def __init__(self, ROWS, COLUMNS):
 		self.ROWS = ROWS
 		self.COLUMNS = COLUMNS
-	
+		
 	# Get list of a cells neighbors (coefficients of (i,j)) by rule being
 	#followed
 	def _get_neighbor_type(self, rules):
@@ -311,7 +264,7 @@ class UpdateFunction(Status, Cell, GameRules):
 				nextGen[x][y].status = life
 				cellStats[x][y].past.append(life)
 				cellStats[x][y].generations += 1
-				
+			
 		return nextGen
 
 	# Method to randomly generate initial cell population
@@ -319,15 +272,11 @@ class UpdateFunction(Status, Cell, GameRules):
 		
 		corner_i = floor((ROWS - height) / 2)
 		corner_j = floor((COLUMNS - width) / 2)
-		#height = floor(ROWS / 2)
-		#width = floor(COLUMNS / 2)
-		#corner_i = floor(ROWS - floor(ROWS / 2) / 2)
-		#corner_j = floor(COLUMNS - floor(COLUMNS / 2) / 2)
 			
 		for j in range(width):
 			for i in range(height):
-				# 25% chance of cell starting as alive
-				rand_num = randint(0,1)
+				# 33% chance of cell starting as alive
+				rand_num = randint(0,2)
 				if rand_num == 1:
 					currentGeneration[corner_i + i][corner_j + j].status = 1
 					
@@ -337,43 +286,11 @@ class UpdateFunction(Status, Cell, GameRules):
 		for i in range(ROWS):
 			for j in range(COLUMNS):
 				if currentGeneration[i][j].status == 1:
-					print("X", end=' ')
+					print("X", end = ' ')
 				else:
-					print("_", end=' ')
+					print("_", end = ' ')
 			print("")
 				
-	def test_method():
-		print("Test works")
-		
 update = UpdateFunction(ROWS, COLUMNS)
 					
-def main():
-
-	'''from alg_game_of_life import generate_rand, update_generation, draw_generation'''
 	
-	flag = 0
-	#rules = GameRules()
-	#game = UpdateFunction
-	update.generate_rand(currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
-	#UpdateFunction
-	update.draw_generation(currentGeneration, ROWS, COLUMNS)
-	
-	user_action = ''
-	
-	while user_action != 'q':
-		user_action = input("Press enter to add generation or q to quit:")
-	
-		if user_action == '':
-			#UpdateFunction
-			if flag == 0:
-				newGen = update.update_generation(currentGeneration, rules, cellStats)
-			else:
-				newGen = update.update_generation(newGen, rules, cellStats)
-			#UpdateFunction
-			update.draw_generation(newGen, ROWS, COLUMNS)
-			flag = 1
-
-if __name__ == '__main__':
-	main()
-	
-
