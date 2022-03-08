@@ -3,8 +3,8 @@ from random import randint
 
 ''' global variables/ Macros '''
 ''' defined for simplicity in changing attributes used throughout program '''
-ROWS = 5
-COLUMNS = 5
+ROWS = 20
+COLUMNS = 20
 
 ''' Class holding rules for current game '''
 ''' Populated by API, used by all '''
@@ -36,8 +36,9 @@ class Cell:
 	living = 0
 	dead = 0
 				
-cellStats = [ [Cell()] * COLUMNS for _ in range(ROWS)]
-		
+#cellStats = [ [Cell()] * COLUMNS for _ in range(ROWS)]
+cellStats = [[ Cell() for j in range(COLUMNS)] for _ in range(ROWS)]
+
 ''' Class to hold 2D array of currentGeneration '''
 ''' Initially populated by API when program in "stop state" '''
 ''' While running Algorithm creates nextGeneration cell state
@@ -49,15 +50,16 @@ class Status():
 	status = 0
 	
 # All cells initially dead
-currentGeneration = [ [Status()] * COLUMNS for _ in range(ROWS)]
+#currentGeneration = [ [Status()] * COLUMNS for _ in range(ROWS)]
+currentGeneration = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
+newGen = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
 
 # Return nextGen of cells and update cellStats array with info abour the
 # new generation
-class UpdateFunction():
-
-	def __init__(self):
-	
-	update = UpdateFunction()
+class UpdateFunction(Status, Cell, GameRules):
+	def __init__(self, ROWS, COLUMNS):
+		self.ROWS = ROWS
+		self.COLUMNS = COLUMNS
 	
 	# Get list of a cells neighbors (coefficients of (i,j)) by rule being
 	#followed
@@ -114,12 +116,12 @@ class UpdateFunction():
 		if rules.shape == 4:
 			
 			# Immediate neighbors (1 layer) = 8
-			if rules.type == 1:
+			if rules.pattern == 1:
 				neighborhood = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1),
 				    (1,-1),  (1,0), (1,1)]
 				
 			# Double layer of neighbors = 24
-			elif rules.type == 2:
+			elif rules.pattern == 2:
 				neighborhood = [(-2,-2), (-2,-1), (-2,0), (-2,1), (-2,2),
 				    (-1,-2), (-1,-1), (-1,0), (-1,1), (-1,2), (0,-2),
 				    (0,-1), (0,1), (0,2), (1,-2), (1,-1), (1,0), (1,1),
@@ -212,7 +214,7 @@ class UpdateFunction():
 		if rules.shape == 6:
 				
 			# Immediate neighbors (1 layer) = 6
-			if rules.type == 1:
+			if rules.pattern == 1:
 				neighborhood = [(0,-1), (0,1)]
 				#Even Hexagon
 				if (i + j) %2 == 0:
@@ -223,7 +225,7 @@ class UpdateFunction():
 				neighborhood += more
 				
 			# Double layer of neighbors = 18
-			elif rules.type == 2:
+			elif rules.pattern == 2:
 				neighborhood = [(-1,-2), (-1,-1), (-1,0), (-1,1), (-1,2),
 				    (0,-2), (0,-1), (0,1), (0,2), (1,-2), (1,-1), (1,0),
 				    (1,1), (1,2)]
@@ -257,19 +259,19 @@ class UpdateFunction():
 	def _count_neighbors(self, currentGeneration, i, j, rules):
 
 		count = 0
-		neighborhood = self._get_neighbor_type(self, rules)
+		neighborhood = self._get_neighbor_type(rules)
 
 		# Calculate status of neighbors
-		for rows in neighborhood:
+		for x in neighborhood:
 				
-			h = i + row[0]
+			h = i + x[0]
 			# Wrap around to top if fall off of bottom of field
-			if(h > ROWS):
+			if(h >= ROWS):
 				h -= ROWS
 
-			w = j + row[1]
+			w = j + x[1]
 			# Wrap around to left edge if fall off of right one
-			if(w > COLUMNS):
+			if(w >= COLUMNS):
 				w -= COLUMNS
 
 			count+= currentGeneration[h][w].status
@@ -278,16 +280,16 @@ class UpdateFunction():
 
 	# Use rules to determine if each cell in currentGeneration has enough
 	# neighbors to live. Create and return new array for nextGen
-	def update_generation(currentGeneration, rules, cellStats):
+	def update_generation(self, currentGeneration, rules, cellStats):
 
 		# New array to hold status of next generation cells
-		nextGen = [ [Status()] * COLUMNS for _ in range(ROWS)]
+		nextGen = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
 
-		for y in range(COLUMNS):
-			for x in range(ROWS):
-				neighbors = self._count_neighbors(self, currentGeneration, x, y, rules)
+		for x in range(ROWS):
+			for y in range(COLUMNS):
+				neighbors = self._count_neighbors(currentGeneration, x, y, rules)
 
-				cellStatus[x][y].neighbors = neighbors
+				cellStats[x][y].neighbors = neighbors
 
 				life = 0
 
@@ -300,7 +302,7 @@ class UpdateFunction():
 						cellStats[x][y].dead += 1
 				# Test if cell spawns
 				else:
-					if neighbors >= rule.min2spawn and neighbors <= rule.max2spawn:
+					if neighbors >= rules.min2spawn and neighbors <= rules.max2spawn:
 						life = 1
 						cellStats[x][y].living += 1
 					else:
@@ -309,40 +311,52 @@ class UpdateFunction():
 				nextGen[x][y].status = life
 				cellStats[x][y].past.append(life)
 				cellStats[x][y].generations += 1
+				
+		return nextGen
 
 	# Method to randomly generate initial cell population
-	def generate_rand(currentGeneration, height, width):
+	def generate_rand(self, currentGeneration, height, width):
 		
 		corner_i = floor((ROWS - height) / 2)
 		corner_j = floor((COLUMNS - width) / 2)
+		#height = floor(ROWS / 2)
+		#width = floor(COLUMNS / 2)
+		#corner_i = floor(ROWS - floor(ROWS / 2) / 2)
+		#corner_j = floor(COLUMNS - floor(COLUMNS / 2) / 2)
 			
 		for j in range(width):
 			for i in range(height):
 				# 25% chance of cell starting as alive
-				rand_num = randint(0,3)
+				rand_num = randint(0,1)
 				if rand_num == 1:
-					currentGeneration[i][j].status = 1
+					currentGeneration[corner_i + i][corner_j + j].status = 1
 					
 	# Method to draw currentGeneration for testing
-	def draw_generation(currentGeneration, ROWS, COLUMNS):
+	def draw_generation(self, currentGeneration, ROWS, COLUMNS):
 			
 		for i in range(ROWS):
 			for j in range(COLUMNS):
 				if currentGeneration[i][j].status == 1:
-					print("X")
+					print("X", end=' ')
 				else:
-					print("_")
+					print("_", end=' ')
+			print("")
 				
 	def test_method():
 		print("Test works")
+		
+update = UpdateFunction(ROWS, COLUMNS)
 					
 def main():
 
 	'''from alg_game_of_life import generate_rand, update_generation, draw_generation'''
-
+	
+	flag = 0
 	#rules = GameRules()
-	game = UpdateFunction.generate_rand(currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
-	UpdateFunction.draw_generation(currentGeneration, ROWS, COLUMNS)
+	#game = UpdateFunction
+	update.generate_rand(currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
+	#UpdateFunction
+	update.draw_generation(currentGeneration, ROWS, COLUMNS)
 	
 	user_action = ''
 	
@@ -350,9 +364,16 @@ def main():
 		user_action = input("Press enter to add generation or q to quit:")
 	
 		if user_action == '':
-			UpdateFunction.update_generation(currentGeneration, rules, cellStats)
-			UpdateFunction.draw_generation(currentGeneration, ROWS, COLUMNS)
-			
-main()
+			#UpdateFunction
+			if flag == 0:
+				newGen = update.update_generation(currentGeneration, rules, cellStats)
+			else:
+				newGen = update.update_generation(newGen, rules, cellStats)
+			#UpdateFunction
+			update.draw_generation(newGen, ROWS, COLUMNS)
+			flag = 1
+
+if __name__ == '__main__':
+	main()
 	
 
