@@ -70,71 +70,76 @@ class Thoughts:
 	#	cellThoughts = [ [Thoughts()] * COLUMNS for _ in range(ROWS)]
 		
 ''' Main loop for Game of Life '''
-while 1:
-	algFlag = 0                 # Flag to track if first time through alg function
+def main():
+
+	while 1:
+		algFlag = 0                 # Flag to track if first time through alg function
 	
-	''' Get rules and beginning currentGenerationm cell Status from API '''
-	# rules = Rules
-	# zoom = 0
-	start = 1
-	''' should be defined in API '''
-	# start = getAPIinfo(rules, currentGeneration)
+		''' Get rules and beginning currentGenerationm cell Status from API '''
+		# rules = Rules
+		# zoom = 0
+		start = 1
+		''' should be defined in API '''
+		# start = getAPIinfo(rules, currentGeneration)
 	
-	# Get random initial cell status from algorithms
-	UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
-	# TEMPORARY
-	# Draw image of initial generation of cells- could be here or inside next loop
-	UpdateFunction.draw_generation(update, currentGeneration, ROWS, COLUMNS)
+		# Get random initial cell status from algorithms
+		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
+		# TEMPORARY
+		# Draw image of initial generation of cells- could be here or inside next loop
+		UpdateFunction.draw_generation(update, currentGeneration, ROWS, COLUMNS)
 	
-	while start == 1:
+		while start == 1:
 	
-		''' Get current zoom level from API for rendering '''
-		#zoom = getZoom()
+			''' Get current zoom level from API for rendering '''
+			#zoom = getZoom()
 		
-		''' Update cell thought process '''
-		#if (err = updateThoughtProcess(rules, currentGeneration[i][j], cellStats[i][j], cellThoughts[i][j])) != 0:
-		''' Handle error with thought process '''
+			''' Update cell thought process '''
+			#if (err = updateThoughtProcess(rules, currentGeneration[i][j], cellStats[i][j], cellThoughts[i][j])) != 0:
+			''' Handle error with thought process '''
 			#print("Error with thought process. Error code {err}\n")
 	
-		''' Render image '''
+			''' Render image '''
 		
 		
-		'''if (err = renderImage(rules.shape, ROWS, COLUMNS, zoom, currentGeneration)) != 0:'''
-		''' Handle error with image rendering '''
+			'''if (err = renderImage(rules.shape, ROWS, COLUMNS, zoom, currentGeneration)) != 0:'''
+			''' Handle error with image rendering '''
 			#print("Error with image rendering. Error code {err}\n")
 			
-		''' Update currentGeneration Status using Algorithms '''
-		#if (algorithmErr = updateStatus(rules, currentGeneration, cellStats)) != 0:
-		''' Handle error with status update '''
+			''' Update currentGeneration Status using Algorithms '''
+			#if (algorithmErr = updateStatus(rules, currentGeneration, cellStats)) != 0:
+			''' Handle error with status update '''
 			#print("Error with updating cell status. Error code {algorithmErr}\n")
-		''' Algorithms '''
-		if algFlag == 0:
-			newGen = update.update_generation(currentGeneration, rules, cellStats)
-		else:
-			newGen = UpdateFunction.update_generation(update, newGen, rules, cellStats)
-		algFlag = 1
+			''' Algorithms '''
+			if algFlag == 0:
+				newGen = update.update_generation(currentGeneration, rules, cellStats)
+			else:
+				newGen = UpdateFunction.update_generation(update, newGen, rules, cellStats)
+			algFlag = 1
 	
-		# Temp render updated generation of cells
-		UpdateFunction.draw_generation(update, newGen, ROWS, COLUMNS)
+			# Temp render updated generation of cells
+			UpdateFunction.draw_generation(update, newGen, ROWS, COLUMNS)
 		
-		# temp sleep- later sleep is used for pause only
-		start = 2
-		#start = getAPIinfo(rules, currentGeneration)
+			# temp sleep- later sleep is used for pause only
+			start = 2
+			#start = getAPIinfo(rules, currentGeneration)
 		
-		''' if start == 2 pause until "game" is resumeed '''
-		while start == 2:
-			time.sleep(0.5)          # pause 500 miliseconds
-			start = 1
+			''' if start == 2 pause until "game" is resumeed '''
+			while start == 2:
+				time.sleep(0.5)          # pause 500 miliseconds
+				start = 1
 	
-	''' Exited program before stability was reached. Report error. '''
-	''' Save current game status '''
-	#if algorithmErr == 1:
-	#	print("Program exited prior to reaching stability\n")
-	#	print("Saving curent program status.\n")
+		''' Exited program before stability was reached. Report error. '''
+		''' Save current game status '''
+		#if algorithmErr == 1:
+		#	print("Program exited prior to reaching stability\n")
+		#	print("Saving curent program status.\n")
 		
-	#if (err = saveProgram(rules, currentGeneration, cellStats, cellThoughts)) != 0:
-	#	''' Handle error saving game status '''
-	#	print("Error saving game. Error code {err}\n")
+		#if (err = saveProgram(rules, currentGeneration, cellStats, cellThoughts)) != 0:
+		#	''' Handle error saving game status '''
+		#	print("Error saving game. Error code {err}\n")
+	
+if __name__ == '__main__':
+	main()
 	
 			
 		
