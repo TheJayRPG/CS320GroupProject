@@ -6,8 +6,33 @@
 ''' ********************************************************* '''
 
 ''' Import files from individual cool cams '''
+
 from Algorithms.alg import *
 
+#BEGIN: https://pythonbasics.org/webserver/
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse
+hostName = "localhost"
+serverPort = 8080
+class MyServer(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        reqFile = open("src/website/graphics" + self.path, "r")
+        #print(reqFile.read())
+        self.wfile.write(bytes(reqFile.read(), "utf-8"))
+        reqFile.close()
+        #self.wfile.write(bytes("<html><head><title>https://pythonbasics.org</title></head>", "utf-8"))
+        #self.wfile.write(bytes("<p>Request: %s</p>" % self.path, "utf-8"))
+        #self.wfile.write(bytes("<body>", "utf-8"))
+        #self.wfile.write(bytes("<p>This is an example web server.</p>", "utf-8"))
+        #self.wfile.write(bytes("</body></html>", "utf-8"))
+		
+
+
+
+#END: https://pythonbasics.org/webserver/
 ''' Import python files '''
 import time
 
@@ -138,8 +163,30 @@ def main():
 		#	''' Handle error saving game status '''
 		#	print("Error saving game. Error code {err}\n")
 	
-if __name__ == '__main__':
-	main()
+#if __name__ == '__main__':
+#	main()
 	
-			
-		
+
+
+
+#BEGIN: https://pythonbasics.org/webserver/		
+import threading
+if __name__ == "__main__":        
+    webServer = HTTPServer((hostName, serverPort), MyServer)
+    print("Server started http://%s:%s" % (hostName, serverPort))
+#BEGIN: https://thispointer.com/python-how-to-create-a-thread-to-run-a-function-in-parallel/
+    th = threading.Thread(target=main)
+    th.start()
+#END: https://thispointer.com/python-how-to-create-a-thread-to-run-a-function-in-parallel/
+    
+
+    try:
+        webServer.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+    webServer.server_close()
+    print("Server stopped.")
+    
+#END: https://pythonbasics.org/webserver/
+
