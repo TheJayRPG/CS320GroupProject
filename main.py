@@ -6,7 +6,7 @@
 ''' ********************************************************* '''
 
 ''' Import files from individual cool cams '''
-from alg import *
+from Algorithms.alg import *
 
 ''' Import python files '''
 import time
