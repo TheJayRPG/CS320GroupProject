@@ -1,4 +1,5 @@
 "use strict";
+/*
 function loadFile(filePath) {       //https://stackoverflow.com/questions/36921947/read-a-server-side-file-using-javascript
     var result = null;
     var xmlhttp = new XMLHttpRequest();
@@ -9,7 +10,7 @@ function loadFile(filePath) {       //https://stackoverflow.com/questions/369219
     }
     return result;
 }
-
+*/
 
 
 const GRIDTYPE = { 

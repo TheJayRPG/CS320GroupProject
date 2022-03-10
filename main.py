@@ -9,33 +9,10 @@
 
 from Algorithms.alg import *
 
-#BEGIN: https://pythonbasics.org/webserver/
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from urllib.parse import urlparse
-hostName = "localhost"
-serverPort = 8080
-class MyServer(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-        reqFile = open("src/website/graphics" + self.path, "r")
-        #print(reqFile.read())
-        self.wfile.write(bytes(reqFile.read(), "utf-8"))
-        reqFile.close()
-        #self.wfile.write(bytes("<html><head><title>https://pythonbasics.org</title></head>", "utf-8"))
-        #self.wfile.write(bytes("<p>Request: %s</p>" % self.path, "utf-8"))
-        #self.wfile.write(bytes("<body>", "utf-8"))
-        #self.wfile.write(bytes("<p>This is an example web server.</p>", "utf-8"))
-        #self.wfile.write(bytes("</body></html>", "utf-8"))
-		
 
-
-
-#END: https://pythonbasics.org/webserver/
 ''' Import python files '''
 import time
-
+import json 
 ''' global variables/ Macros '''
 ''' defined for simplicity in changing attributes used throughout program '''
 ROWS = 20                              #700 - temp using restrictede space
@@ -77,9 +54,11 @@ cellStats = [[ Cell() for j in range(COLUMNS)] for _ in range(ROWS)]
 ''' Initially populated by API when program in "stop state" '''
 ''' While running Algorithm creates nextGeneration cell state
     then updates currentGeneration with new data '''
-class Status():
+class Status(json.JSONEncoder):
 	# Set all cells to dead by default
 	status = 0
+	def default(self,obj):
+		return 1 - obj.status
 
 # Two instances of class to avoid use before definition issue
 currentGeneration = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
@@ -96,7 +75,8 @@ class Thoughts:
 		
 ''' Main loop for Game of Life '''
 def main():
-
+	global currentGeneration
+	global newGen
 	while 1:
 		algFlag = 0                 # Flag to track if first time through alg function
 	
@@ -111,7 +91,7 @@ def main():
 		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
 		# TEMPORARY
 		# Draw image of initial generation of cells- could be here or inside next loop
-		UpdateFunction.draw_generation(update, currentGeneration, ROWS, COLUMNS)
+		#UpdateFunction.draw_generation(update, currentGeneration, ROWS, COLUMNS)
 	
 		while start == 1:
 	
@@ -140,9 +120,13 @@ def main():
 			else:
 				newGen = UpdateFunction.update_generation(update, newGen, rules, cellStats)
 			algFlag = 1
-	
 			# Temp render updated generation of cells
-			UpdateFunction.draw_generation(update, newGen, ROWS, COLUMNS)
+			#UpdateFunction.draw_generation(update, newGen, ROWS, COLUMNS)
+            
+			#for x in newGen:
+			#	for y in x:
+			#		print(y.status,end="")
+			#	print()
 		
 			# temp sleep- later sleep is used for pause only
 			start = 2
@@ -169,13 +153,44 @@ def main():
 
 
 
-#BEGIN: https://pythonbasics.org/webserver/		
+#BEGIN: https://pythonbasics.org/webserver/
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse
+
+hostName = "localhost"
+serverPort = 8080
+class MyServer(BaseHTTPRequestHandler):
+    def do_GET(self):
+        #print(self.path)
+        if self.path == "/TILES" :
+            print("OOPS")
+        else:
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            reqFile = open("src/website/graphics" + self.path, "r")
+            #print(reqFile.read())
+            self.wfile.write(bytes(reqFile.read(), "utf-8"))
+            reqFile.close()
+    def do_POST(self):
+        if self.path == "/TILES" :
+            #print("HI")
+            self.send_response(200)
+            self.send_header("Content-type", "text/plain")
+            self.end_headers()
+            #for x in newGen:
+            #    for y in x:
+            #        print(y.status,end=" ")
+            #    print()
+            #print(json.dumps(newGen, cls=Status))
+            self.wfile.write(bytes(json.dumps(newGen, cls=Status),"utf-8"))
 import threading
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName, serverPort), MyServer)
     print("Server started http://%s:%s" % (hostName, serverPort))
 #BEGIN: https://thispointer.com/python-how-to-create-a-thread-to-run-a-function-in-parallel/
     th = threading.Thread(target=main)
+    th.daemon = True
     th.start()
 #END: https://thispointer.com/python-how-to-create-a-thread-to-run-a-function-in-parallel/
     
@@ -187,6 +202,6 @@ if __name__ == "__main__":
 
     webServer.server_close()
     print("Server stopped.")
-    
+	
 #END: https://pythonbasics.org/webserver/
 
