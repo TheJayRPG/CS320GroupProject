@@ -47,6 +47,7 @@ class Cell:
 	generations = 0
 	living = 0
 	dead = 0
+	stableAt = -1      # used as a flag in cell [0][0]
 				
 cellStats = [[ Cell() for j in range(COLUMNS)] for _ in range(ROWS)]
 		
@@ -79,6 +80,7 @@ def main():
 	global newGen
 	while 1:
 		algFlag = 0                 # Flag to track if first time through alg function
+		endFlag = -1                # Flag used to terminate program once stable
 	
 		''' Get rules and beginning currentGenerationm cell Status from API '''
 		# rules = Rules
@@ -127,6 +129,32 @@ def main():
 			#	for y in x:
 			#		print(y.status,end="")
 			#	print()
+			
+			# Check status of end flag. If stable and still life end drawing
+			# new generations (currently changes start flag to 0 ending all
+			# program cycles, but should just end getting and rendering new 
+			# generations).  
+			if cellStats[0][0].stableAt > 0:
+				print((f"System has reached stability in {world.gen2stable} "
+					"generations \nand has an oscillation period of "
+					f"{world.period}."))
+				if world.period == 1:
+					print("Still Life Found")
+					print("Terminating Program - Will hand control back to API"
+						"in future")
+					start = 0
+				elif endFlag == -1:
+					print("Oscillating pattern has been found. Will terminate"
+						"after 2 oscillations")
+					endFlag = 2 * world.period
+				elif endFlag > 0:
+					print(f"{endFlag} generations remain before termination")
+					endflag -= 1
+				else:
+					print("Program Terminating - will hand control back to API"
+						" in future.")
+					start = 0
+		
 		
 			# temp sleep- later sleep is used for pause only
 			start = 2
