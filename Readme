@@ -1,0 +1,62 @@
+
+CS 320 Spring 2022
+Group Project: Custom Conway's Game of Life
+
+Kristine Hess
+Algorithms
+
+Main:
+     This main.py file was the original pseudo code I wrote to define structures 
+     that would be used by all group members to communicate the state of the cells
+     and the system. I have left most of the interfaces in place to show the 
+     Control flow of the program, though much of it will be further revised as we 
+     Integrate our individual components into a working group project. At this time 
+     I have main printing the neighbors for all cell types, though this is only 
+     necessary for testing purposes. Main currently runs correctly with the default
+     cell rules (shape, pattern, neighbors needed to live or be reborn) though it 
+     hasn't been tested when the rules are changed. 
+
+Minor Milestone:
+Determining Next Generation
+     We will be using 4 different cell shapes, triangles, squares, pentagons, and 
+     hexagons and giving 3 options for the neighbors to include in determining if
+     a cell continues to live, is born, or dies. Neighbors can be a single layer,
+     counting all neighbors that have physical contact with the cell, a double 
+     layer, or knights move (this doesn't work great on cells other than squares,
+     but are defined loosely by following this rule).
+
+     I have found it necessary to change the method by which I was counting 
+     neighbors and calculating the next generation of cells to live several times.
+     One of my initial methods was to used python's sum function, but I could not 
+     figure out how to deal with the cells wrapping around the edges when using this 
+     method. I finally settled on creating lists of the coefficients for all a cells 
+     neighbors based on which cell was being checked. This way I could use a loop to 
+     add these to the current (i,j) value of the cell and handle subtracting the 
+     maximum width if they would wrap around the right or bottom edges of the "world".
+     Python's negative indexing allows me to ignore cells that fall off of the left 
+     and top edges. Some of my early code was submitted to my branch on GitHub, though
+     some attempts were abandoned before making it that far. 
+
+     A function to draw the neighbors has been written so I could visualize how
+     the neighbors are laid out, to make sure that the correct neighbors were 
+     coded into the respective lists. This feature may be revised to use when 
+     selecting cell and pattern type on the website, so the user could see their
+     choice. 
+
+     There is also a simple function to render the image as I could not test my 
+     code for the algorithms without attempting to render it. This code will be 
+     unnecessary in the final product as another group member is responsible for 
+     doing the graphics for our final project.
+
+Major Milestone:
+Cellular Statistics
+     The included code also begins to handle gathering the cellular statistics and 
+     determining what generation stability is reached and the period of oscillation
+     (1 if its a still life). 
+
+
+At last count this was just about exactly 460 lines of code (excluding an immense 
+amount of white space and comments obviously as this comes in at 841 lines currently). 
+I have changed approaches several times and done a significant amount of refactoring, 
+only a small part of which can be seen on my branch of my group's Github page at 
+https://github.com/TheJayRPG/CS320GroupProject/tree/Kristine--Algorithms
