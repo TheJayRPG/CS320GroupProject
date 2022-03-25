@@ -196,12 +196,17 @@ class MyServer(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
-            reqFile = open("src/website/graphics" + self.path, "r")
+            #print(self.path[-5:-1])
+            #if self.path[-5:-1] == ".htm" :
+                #reqFile = open("eric--web" + self.path, "r")                
+            #else :
+            reqFile = open("." + self.path, "r")
             #print(reqFile.read())
             self.wfile.write(bytes(reqFile.read(), "utf-8"))
             reqFile.close()
     def do_POST(self):
-        if self.path == "/TILES" :
+        print(self.path)
+        if self.path == "/TILES" or self.path == "/eric--web/TILES":
             #print("HI")
             self.send_response(200)
             self.send_header("Content-type", "text/plain")

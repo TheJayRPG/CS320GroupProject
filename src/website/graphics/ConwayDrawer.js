@@ -92,8 +92,15 @@ const GRIDTYPE = {
         },
         SETUP(gl, _thisArg) {
             if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
-            const fragmentShader = loadFile("./shaders/square.frag");
-            const vertexShader = loadFile("./shaders/square.vert");
+            let fragmentShader;
+            let vertexShader;
+            if(withinTestingEnvironment) {
+                fragmentShader = loadFile("./shaders/square.frag");
+                vertexShader = loadFile("./shaders/square.vert");
+            } else {
+                fragmentShader = loadFile("../src/website/graphics/shaders/square.frag");
+                vertexShader = loadFile("../src/website/graphics/shaders/square.vert");
+            }
             _thisArg.shaderProgram = _thisArg._createSimpleShader(_thisArg._gl, vertexShader, fragmentShader);            
             _thisArg.atPos1 = gl.getAttribLocation(_thisArg.shaderProgram, 'aVertexPosition');
             //_thisArg.atPos2 = gl.getAttribLocation(_thisArg.shaderProgram, 'a_texcoord');
@@ -167,8 +174,15 @@ const GRIDTYPE = {
             ];
             
             if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
-            const fragmentShader = loadFile("./shaders/simple.frag");
-            const vertexShader = loadFile("./shaders/simple.vert");
+            let fragmentShader;
+            let vertexShader;
+            if(withinTestingEnvironment) {
+                fragmentShader = loadFile("./shaders/simple.frag");
+                vertexShader = loadFile("./shaders/simple.vert");
+            } else {
+                fragmentShader = loadFile("../src/website/graphics/shaders/simple.frag");
+                vertexShader = loadFile("../src/website/graphics/shaders/simple.vert");
+            }
             _thisArg.shaderProgram = _thisArg._createSimpleShader(_thisArg._gl, vertexShader, fragmentShader);            
             _thisArg.atPos1 = gl.getAttribLocation(_thisArg.shaderProgram, 'aVertexPosition');
             _thisArg.unPos1 = gl.getUniformLocation(_thisArg.shaderProgram, 'timeVal');

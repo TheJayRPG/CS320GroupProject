@@ -3,8 +3,9 @@
 let ROWS = 20;
 let COLS = 20;
 
-
+withinTestingEnvironment = false
 let drawer = new ConwayDrawer(ROWS,COLS, GRIDTYPE.SQUARE, ROWS, COLS);
+
 let thisTime = Date.now();
 let prevTime
 const frameRate = 60;

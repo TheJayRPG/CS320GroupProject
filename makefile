@@ -1,4 +1,4 @@
-LOC = /src/website
+LOC = 
 
 
 main:
