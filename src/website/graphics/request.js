@@ -37,7 +37,7 @@ function getServerTiles() {
     //console.log(result);
     
     reallyLongNameForStorageOfTiles = JSON.parse(result);
-    console.log(reallyLongNameForStorageOfTiles);
+    //console.log(reallyLongNameForStorageOfTiles);
     //console.log(reallyLongNameForStorageOfTiles);
     //alert(reallyLongNameForStorageOfTiles);
     return result;
@@ -47,10 +47,10 @@ function getServerTiles() {
 function requestTiles(minX, minY, maxX, maxY) {
     //console.log(`${minX} ${maxX} ${minY} ${maxY}`);
     
-    let shortName = reallyLongNameForStorageOfTiles
+    let result = reallyLongNameForStorageOfTiles
         .slice(minY, maxY)
         .map(y => y.slice(minX, maxX));
     
-    //console.log(`${shortName[0][0]} ${reallyLongNameForStorageOfTiles[minX][minY]}`);
-    return shortName;
+    //console.log(`${result[0][0]} ${reallyLongNameForStorageOfTiles[minX][minY]}`);
+    return result;
 }

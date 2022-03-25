@@ -1,12 +1,12 @@
 "use strict";
 
-describe("pow", function() {
+describe("pow", function() {    //Meta Test
     it("2 raised to the power 3 is 8", function() {
         assert.equal( pow(2,3), 8);
     });
 });
 
-describe("draw", function() {
+describe("draw", function() {   // Acceptance Test
     let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
     let runsArr = [];
     const runCount = 100;
@@ -22,7 +22,7 @@ describe("draw", function() {
 });
 
 
-describe("request", function() {
+describe("draw graph edges", function() {   // Branch Coverage Test
     let EmptyDrawer;
     function drawCommon() {
         EmptyDrawer.draw(0);
@@ -72,4 +72,83 @@ describe("request", function() {
     });
 });
 
+describe("request", function(){     // Integration Test
+    it("Request goes through", function() {
+        assert(getServerTiles().length > 0);
+    });
+});
+
+describe("swap gridtype", function(){   // Acceptance Test
+    it("swap back gridtype works", function() {
+        let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        EmptyDrawer.swapGridType(GRIDTYPE.TEST);
+        EmptyDrawer.swapGridType(GRIDTYPE.SQUARE);
+        assert(EmptyDrawer.gridType == GRIDTYPE.SQUARE);
+    });
+});
+describe("move grid position", function(){   // Acceptance Test
+    it("move", function() {
+        let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        const offX = 1;
+        const offY = 2;
+        const oldPosX = EmptyDrawer.posX;
+        const oldPosY = EmptyDrawer.posY;
+        EmptyDrawer.moveWindow(offX, offY);
+        assert(((EmptyDrawer.posX - offX) % EmptyDrawer.maxX == oldPosX) && ((EmptyDrawer.posY - offY) % EmptyDrawer.maxY == oldPosY));
+    });
+    it("move above max", function() {
+        let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        const offX = EmptyDrawer.maxX + 2;
+        const offY = EmptyDrawer.maxY + 3;
+        const oldPosX = EmptyDrawer.posX;
+        const oldPosY = EmptyDrawer.posY;
+        EmptyDrawer.moveWindow(offX, offY);
+        assert(((EmptyDrawer.posX - offX) % EmptyDrawer.maxX == oldPosX) && ((EmptyDrawer.posY - offY) % EmptyDrawer.maxY == oldPosY));
+    });
+    it("move below min", function() {
+        let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        const offX = - EmptyDrawer.maxX - 2;
+        const offY = - EmptyDrawer.maxY - 3;
+        const oldPosX = EmptyDrawer.posX;
+        const oldPosY = EmptyDrawer.posY;
+        EmptyDrawer.moveWindow(offX, offY);
+        assert(((EmptyDrawer.posX - offX) % EmptyDrawer.maxX == oldPosX) && ((EmptyDrawer.posY - offY) % EmptyDrawer.maxY == oldPosY));
+    });
+});
+
+describe("scale grid size", function(){   // Acceptance Test
+    it("scale", function() {
+        let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        const offX = 1;
+        const offY = offX;
+        const oldPosX = EmptyDrawer.rangeX;
+        const oldPosY = EmptyDrawer.rangeY;
+        EmptyDrawer.scaleWindow(offX);
+        const corX = Math.min(EmptyDrawer.maxX, Math.max(oldPosX + offX, 1));
+        const corY = Math.min(EmptyDrawer.maxY, Math.max(oldPosY + offY, 1));
+        assert((corX == EmptyDrawer.rangeX) && (corY == EmptyDrawer.rangeY));
+    });
+    it("scale above max", function() {
+        let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        const offX = EmptyDrawer.maxX + 2;
+        const offY = offX;
+        const oldPosX = EmptyDrawer.rangeX;
+        const oldPosY = EmptyDrawer.rangeY;
+        EmptyDrawer.scaleWindow(offX);
+        const corX = Math.min(EmptyDrawer.maxX, Math.max(oldPosX + offX, 1));
+        const corY = Math.min(EmptyDrawer.maxY, Math.max(oldPosY + offY, 1));
+        assert((corX == EmptyDrawer.rangeX) && (corY == EmptyDrawer.rangeY));
+    });
+    it("scale below min", function() {
+        let EmptyDrawer = new ConwayDrawer(100,100, GRIDTYPE.SQUARE, 7, 11);
+        const offX = - EmptyDrawer.maxX - 2;
+        const offY = offX;
+        const oldPosX = EmptyDrawer.rangeX;
+        const oldPosY = EmptyDrawer.rangeY;
+        EmptyDrawer.scaleWindow(offX);
+        const corX = Math.min(EmptyDrawer.maxX, Math.max(oldPosX + offX, 1));
+        const corY = Math.min(EmptyDrawer.maxY, Math.max(oldPosY + offY, 1));
+        assert((corX == EmptyDrawer.rangeX) && (corY == EmptyDrawer.rangeY));
+    });
+});
 

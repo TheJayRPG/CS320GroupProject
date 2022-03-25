@@ -206,18 +206,18 @@ class ConwayDrawer {
         this.gridType.SETUP(this._gl, this);
     }
     moveWindow(offX, offY) {
-        this.posX += offX;
-        this.posX %= this.maxX;
-        this.posY += offY;
-        this.posY %= this.maxY;
+        this.posX = this.posX + offX;
+        this.posX = (this.posX + this.maxX) % this.maxX;
+        this.posY = this.posY + offY;
+        this.posY = (this.posY + this.maxY) % this.maxY;
     }
     setMoveWindow(offX, offY) {
         this.posX = offX;
         this.posY = offY;
     }
     scaleWindow(sFac) {
-        this.rangeX += sFac;
-        this.rangeY += sFac;
+        this.rangeX = Math.min(this.maxX, Math.max(this.rangeX + sFac, 1));
+        this.rangeY = Math.min(this.maxY, Math.max(this.rangeY + sFac, 1));
     }
     setScaleWindow(sFac) {
         this.rangeX = sFac;
@@ -288,6 +288,9 @@ class ConwayDrawer {
                 return requestTiles(posX, posY,          posX + rangeX,          posY + rangeY);
             }
         }
+    }
+    getCanvas() {
+        return this._canvas
     }
 
     _setupGL() {     //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL
