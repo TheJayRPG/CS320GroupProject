@@ -14,7 +14,12 @@ body a:hover {
 }
 
 .scripts {
-  margin: 0 auto;
+  border: 3px solid white;
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
 }
 
 .sidebar {
