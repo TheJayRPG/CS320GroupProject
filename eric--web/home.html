@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CGOL Simulator</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/home.css">
 </head>
 
 <body>
@@ -15,10 +15,10 @@
         <div class="wrapper">
 
             <a class="home" href="home.html"> CGO<span>Life</span></a>
-            <img class="mobileOpen" id="openMenu" src="images/hamburger.svg" alt="Open menu">
+            <img class="mobileOpen" id="openMenu" src="../images/hamburger.svg" alt="Open menu">
 
             <nav>
-                <img class="mobileExit" id="closeMenu" src="images/close.svg" alt="Close menu">
+                <img class="mobileExit" id="closeMenu" src="../images/close.svg" alt="Close menu">
                 <ul class="navLeft" id="navLinks">
                     <li class="curent"><a href="home.html">Home</a></li>
 
@@ -43,7 +43,7 @@
         </header>
 
         <div class="startButton">
-            <a href="#" class="ctaText">Start</a>
+            <a href="sim.html" class="ctaText">Start</a>
         </div>
 
         <div class="summary">
@@ -70,16 +70,24 @@
             <h2>General Rules</h2>
             <ol>
                 <li>
-                    <blockquote>Any live cell with two or three live neighbours survives.</blockquote>
+                    <blockquote> 
+                        Cells have a living condition based on the number of neighbors. 
+                        If there are too little or too many neighbors, the cell will die.
+                    </blockquote>
                 </li>
 
                 <li>
-                    <blockquote>Any dead cell with three live neighbours becomes a live cell.</blockquote>
+                    <blockquote>
+                        All other live cells die in the next generation. All other dead cells stay
+                        dead.
+                    </blockquote>
                 </li>
 
                 <li>
-                    <blockquote>All other live cells die in the next generation. All other dead cells stay
-                        dead.</blockquote>
+                    <blockquote>
+                        The user will determine the living conditions via number of neighbors for 
+                        cells to stay alive, spawn, or die.
+                    </blockquote>
                 </li>
             </ol>
 
@@ -95,7 +103,6 @@
                 We have here a simulation style game based on Conway’s Game of life,
                 built from scratch with customizable settings and rules.
                 Cells will follow a set of rules defined by the user.
-                The user will have the option to place cells and edit their behavior.
             </p>
 
 
@@ -120,7 +127,7 @@
                     <textarea class="messageBox" name="message" id="message" cols="30" rows="10"
                         placeholder="Say stuff"></textarea>
 
-                    <input type="submit" class="sendMessage" value="Send message">
+                    <input type="submit" id="submit" class="sendMessage" value="Send message">
                     <br>
                     <a class="substButton" href="mailto:leeric678@gmail.com?subject=Message From CGOL Site User">
                         Send message via email(placeholder)</a>
