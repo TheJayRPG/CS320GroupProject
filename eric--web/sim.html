@@ -7,7 +7,21 @@
   <link rel="stylesheet" href="css/sim.css">
 </head>
 <body>
-    <div class="sidebar"> 
+    
+   <div class="scripts">
+        <canvas id="glCanvas" width="400" height="400"></canvas>
+        <script>var withinTestingEnvironment = false;</script>
+        <!-- grid request script -->
+        <script src="../src/website/graphics/request.js"></script>
+
+        <!-- resource scripts -->
+        <script src="../src/website/graphics/ConwayDrawer.js"></script>
+
+        <!-- main script -->
+        <script src="../src/website/graphics/build.js"></script>
+    </div>
+
+    <div class="sidebar">
         <a class="home" href="home.html">Return To Home</a>
         <h1>Rule Selections</h1>
         <div class="custom-shape"> 
@@ -21,7 +35,6 @@
            <span class="custom-arrow"></span>
        </div>
 
-       
         <br> <br>
         <div class="custom-pattern">
         <select class="select-pattern"><!--Pattern select dropdown-->
@@ -67,18 +80,4 @@
         <button id="startButton"class="startButton">START</button>
     </div>
 </body>
-
-<canvas id="glCanvas" width="400" height="400"></canvas>
-<script>var withinTestingEnvironment = false;</script>
-<!-- grid request script -->
-<script src="../src/website/graphics/request.js"></script>
-
-<!-- resource scripts -->
-<script src="../src/website/graphics/ConwayDrawer.js"></script>
-
-<!-- main script -->
-<script src="../src/website/graphics/build.js"></script>
-
-
-
 </html>
