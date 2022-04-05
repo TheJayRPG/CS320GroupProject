@@ -10,6 +10,14 @@ body {
     a:hover { color: #0693e3}
 }
 
+.scripts {
+    border: 3px solid white;
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+}
+
 .sidebar {
     //Position and decorate sidebar elements
     display: block;
