@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cell Simulation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sim.css') }}">
+</head>
+<body>
+    <div class="sidebar"> 
+        <a class="home" href="{{ url_for('home') }}">Return To Home</a>
+        <h1>Rule Selections</h1>
+
+        <form action="{{ url_for('sim') }}" method="post">
+
+        <div class="custom-shape"> 
+           <select class="select-shape" id="shape" name="shape"> <!--Shape select dropdown-->
+            <option value="0">Select shape:</option>
+            <option value="3">Triangle</option>
+            <option value="4">Square</option>
+            <option value="5">Pentagon</option>
+            <option value="6">Hexagon</option>
+           </select>
+           <span class="custom-arrow"></span>
+       </div>
+
+       
+        <br> 
+        <div class="custom-pattern">
+        <select class="select-pattern" id="pattern" name="pattern"><!--Pattern select dropdown-->
+            <option value="0">Select pattern:</option>
+            <option value="1">Single layer</option>
+            <option value="2">Double layer</option>
+            <option value="3">Knight's move</option>
+        </select>
+        <span class="custom-arrow"></span>
+       </div>
+
+        <br> 
+        <div class="minLive-slider"> <!--Minimum live condition slider-->
+           <label for="min2live"><b>Mininum</b> neighbors to live: </label>
+           <input class="min2Live" type="number" id="min2live" name="min2live" value="2" min="1" max="36"> 
+       </div>
+
+        <br> 
+        <div class="maxLive-slider"> <!--Maximum live condition slider-->
+            <label for="max2live"><b>Maximum</b> neighbors to live: </label>
+            <input class="max2Live" type="number" id="max2live" name="max2live" value="3" min="1" max="36">
+        </div>
+
+        <br> 
+        <div class="minSpawn-slider"> <!--Minimum spawn condition slider-->
+            <label for="min2spawn"><b>Minimum</b> neighbors to SPAWN: </label>
+            <input class="min2Spawn" type="number" id="min2spawn" name="min2spawn" value="3" min="1" max="36">
+        </div>
+
+        
+        <br> 
+        <div class="maxSpawn-slider"> <!--Maximum spawn condition slider-->
+            <label><b>Maximum</b> neighbors to SPAWN: </label>
+            <input class="max2Spawn" type="number" id="max2spawn" name="max2spawn" value="3" min="1" max="36"> 
+        </div>
+
+        {% if feedback %}
+        <br>
+        <p class="text-danger">{{ feedback }}</p>
+        {% endif %}
+        
+        <br>
+        <input type="submit" value="Set Rules">
+      </form>
+
+        <br>
+        <!--Start button. Begins simulation
+        <button type="submit" id="startButton"class="startButton">START</button>
+        <form action="{{ url_for('sim') }}" method="post">
+          <input type="submit" value="START">
+        </form>
+        -->
+      
+
+    </div>
+</body>
+
+<canvas id="glCanvas" width="400" height="400"></canvas>
+
+<script>
+  function renderGame() {
+    var withinTestingEnvironment = false;
+    //grid request script</script>
+    <script src="../graphics/request.js"></script>
+
+    <!-- resource scripts -->
+    <script src="../graphics/ConwayDrawer.js"></script>
+
+    <!-- main script -->
+    <script src="../graphics/build.js"></script>
+  </script>
+
+
+
+</html>
