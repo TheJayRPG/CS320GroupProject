@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- add mocha css, to show results -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css">
+  <!-- add mocha framework code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
+  <script>
+    mocha.setup('bdd'); // minimal setup
+  </script>
+  <!-- add chai -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.js"></script>
+  <script>
+    // chai has a lot of stuff, let's make assert global
+    let assert = chai.assert;
+  </script>
+</head>
+
+<body>
+
+  <canvas id="glCanvas" width="400" height="400"></canvas>
+  <script>let withinTestingEnvironment = true;</script>
+  
+  <!-- grid request script -->
+  <script src="request.js"></script>
+
+  <!-- resource scripts -->
+  <script src="ConwayDrawer.js"></script>
+
+  <!-- the script with test -->
+  <script src="test.js"></script>
+
+  <!-- main script -->
+  <script src="build.js"></script>
+
+  <!-- the element with id="mocha" will contain test results -->
+  <div id="mocha"></div>  
+
+  <!-- run tests! -->
+  <script>
+    mocha.run();
+  </script>
+  
+</body>
+
+</html>
