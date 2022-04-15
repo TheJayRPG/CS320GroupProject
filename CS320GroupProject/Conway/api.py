@@ -2,7 +2,7 @@
 ''' Custom Conway's Game of Life                                            '''
 ''' API                                                                     '''
 ''' *********************************************************************** '''
-PASSWORD = "p@ssw0rd_2022"
+PASSWORD = 
 
 from flask import Flask, request, jsonify, render_template, url_for,\
                   copy_current_request_context
