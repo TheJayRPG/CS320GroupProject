@@ -1,4 +1,4 @@
-LOC = 
+LOC = ./web
 
 
 main:

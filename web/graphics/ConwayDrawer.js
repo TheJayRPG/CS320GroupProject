@@ -94,13 +94,8 @@ const GRIDTYPE = {
             if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
             let fragmentShader;
             let vertexShader;
-            if(withinTestingEnvironment) {
-                fragmentShader = loadFile("./shaders/square.frag");
-                vertexShader = loadFile("./shaders/square.vert");
-            } else {
-                fragmentShader = loadFile("../src/website/graphics/shaders/square.frag");
-                vertexShader = loadFile("../src/website/graphics/shaders/square.vert");
-            }
+            fragmentShader = loadFile("graphics/shaders/square.frag");
+            vertexShader = loadFile("graphics/shaders/square.vert");
             _thisArg.shaderProgram = _thisArg._createSimpleShader(_thisArg._gl, vertexShader, fragmentShader);            
             _thisArg.atPos1 = gl.getAttribLocation(_thisArg.shaderProgram, 'aVertexPosition');
             //_thisArg.atPos2 = gl.getAttribLocation(_thisArg.shaderProgram, 'a_texcoord');
@@ -176,13 +171,8 @@ const GRIDTYPE = {
             if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
             let fragmentShader;
             let vertexShader;
-            if(withinTestingEnvironment) {
-                fragmentShader = loadFile("./shaders/simple.frag");
-                vertexShader = loadFile("./shaders/simple.vert");
-            } else {
-                fragmentShader = loadFile("../src/website/graphics/shaders/simple.frag");
-                vertexShader = loadFile("../src/website/graphics/shaders/simple.vert");
-            }
+            fragmentShader = loadFile("graphics/shaders/simple.frag");
+            vertexShader = loadFile("graphics/shaders/simple.vert");
             _thisArg.shaderProgram = _thisArg._createSimpleShader(_thisArg._gl, vertexShader, fragmentShader);            
             _thisArg.atPos1 = gl.getAttribLocation(_thisArg.shaderProgram, 'aVertexPosition');
             _thisArg.unPos1 = gl.getUniformLocation(_thisArg.shaderProgram, 'timeVal');
@@ -209,10 +199,10 @@ class ConwayDrawer {
     constructor(sizeX, sizeY, gridType, rangeX, rangeY) {
         this.gridType = gridType;
         this.maxX = sizeX;
-        this.posX = 0;
+        this.posX = Math.floor(sizeX/2);
         this.rangeX = rangeX;
         this.maxY = sizeY;
-        this.posY = 0;
+        this.posY = Math.floor(sizeY/2);
         this.rangeY = rangeY;
         this.netTime = 0;
         this._maskDraw = false;

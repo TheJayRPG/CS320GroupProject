@@ -54,3 +54,15 @@ function requestTiles(minX, minY, maxX, maxY) {
     //console.log(`${result[0][0]} ${reallyLongNameForStorageOfTiles[minX][minY]}`);
     return result;
 }
+
+function getServerSize() {
+    var result = null;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "SIZE", false);
+    xmlhttp.send();
+    if(xmlhttp.status == 200) {
+        result = xmlhttp.responseText;
+    }
+    
+    return JSON.parse(result);
+}

@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
+
+body {
+  font-family:ubuntu;
+  color: white;
+  margin: 0;
+  padding: 0;
+  
+  background-image: url(../images/bg_blob.jpg);
+  background-color: #090909;
+  background-size: cover;
+
+  overflow: hidden;
+  background-repeat: no-repeat;
+}
+
+@keyframes transitionTitle { //Animation for title
+   from {
+       opacity: 0;
+       transform: translateY(-200%);
+   }
+
+   to { 
+       opacity: 1;
+       transform: translateY(0%);
+   }
+}
+
+@keyframes transitionLogin{ //Animation for login form
+    from {
+        opacity: 0;
+        transform: translateY(-20%);
+    }
+ 
+    to { 
+        opacity: 1;
+        transform: translateY(0%);
+    }
+ }
+
+.title {
+  font-size: 16px;
+  line-height: 10px;
+  margin-top: 100px;
+  color: #fff;
+  text-align: center;
+  animation: 1.5s ease-out 0s 1 transitionTitle; // Slide & fade title
+}
+
+form { //Position form content
+    margin-top: 1.95em;
+    animation: 1.3s ease-out 0s 1 transitionLogin; // Slide & fade form
+  }
+
+.loginBlock {
+    background: #1c202a;
+    color: white;
+    width: 29em;
+    height: 28em;
+    padding: 1.8em 1.8em;
+    box-sizing: border-box;
+    
+    //Center login block
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    position: absolute;
+
+    h2 { //Align "Login Here" text
+        text-align: center;
+        margin: 0;
+        padding: 0 0 1.2em;
+    }
+
+    p { //Condense content in the block
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+    }
+
+    input { //Space out input boxes
+        width: 100%; 
+        margin-bottom: 1.3em; 
+    }
+
+    input[type="email"], input[type="password"] { //Style input boxes
+        color: white;
+        font-size: 1em;
+        border: none;
+        border-bottom: 1px solid white;
+        background: transparent;
+        outline: none;
+        height: 2.5em;
+    }
+
+    input[type="submit"] { //Style "Login" button
+        background: #fb2525;
+        color: white;
+        font-size: 1.1em;
+
+        //Button shape
+        border: none;
+        outline: none;
+        height: 2.5em;
+        border-radius: 1.2em;
+    }
+
+    //Change "Login" button color when hovering
+    input[type="submit"]:hover { 
+        cursor: pointer;
+        background: white;
+        color: #dd163b;
+        font-weight: bold;
+    }
+
+    a { //Link styling
+        color: white;
+        line-height: 1.35em;
+      }
+
+    a:hover { //Change link color when hovering
+        color: #0693e3;
+    }
+    
+    a.skip { //Align "Skip" link 
+        float: right;
+    }
+
+}

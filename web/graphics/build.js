@@ -1,10 +1,10 @@
 "use strict";
-
-let ROWS = 20;
-let COLS = 20;
+let tilesSize = getServerSize();
+let ROWS = tilesSize[0];
+let COLS = tilesSize[1];
 
 withinTestingEnvironment = false
-let drawer = new ConwayDrawer(ROWS,COLS, GRIDTYPE.SQUARE, ROWS, COLS);
+let drawer = new ConwayDrawer(ROWS,COLS, GRIDTYPE.SQUARE, 10, 10);
 
 let thisTime = Date.now();
 let prevTime

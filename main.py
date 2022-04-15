@@ -15,8 +15,8 @@ import time
 import json 
 ''' global variables/ Macros '''
 ''' defined for simplicity in changing attributes used throughout program '''
-ROWS = 20                              #700 - temp using restrictede space
-COLUMNS = 20                           #1000 - temp using restricted space
+ROWS = 200                              #700 - temp using restrictede space
+COLUMNS = 200                           #1000 - temp using restricted space
 
 ''' Class holding rules for current game '''
 ''' Populated by API, used by all '''
@@ -184,57 +184,46 @@ def main():
 #BEGIN: https://pythonbasics.org/webserver/
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse
-
 hostName = "localhost"
 serverPort = 8080
+
 class MyServer(BaseHTTPRequestHandler):
-    def do_GET(self):
-        #print(self.path)
-        if self.path == "/TILES" :
-            print("OOPS")
-        else:
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            #print(self.path[-5:-1])
-            #if self.path[-5:-1] == ".htm" :
-                #reqFile = open("eric--web" + self.path, "r")                
-            #else :
-            reqFile = open("." + self.path, "r")
-            #print(reqFile.read())
-            self.wfile.write(bytes(reqFile.read(), "utf-8"))
-            reqFile.close()
-    def do_POST(self):
-        print(self.path)
-        if self.path == "/TILES" or self.path == "/eric--web/TILES":
-            #print("HI")
-            self.send_response(200)
-            self.send_header("Content-type", "text/plain")
-            self.end_headers()
-            #for x in newGen:
-            #    for y in x:
-            #        print(y.status,end=" ")
-            #    print()
-            #print(json.dumps(newGen, cls=Status))
-            self.wfile.write(bytes(json.dumps(newGen, cls=Status),"utf-8"))
+	def do_GET(self):
+		self.send_response(200)
+		self.send_header("Content-type", "text/html")
+		self.end_headers()
+		if self.path == "/" :
+			reqFile = open("./web/index.html", "r")
+		else:
+			reqFile = open("./web/" + self.path, "r")
+		self.wfile.write(bytes(reqFile.read(), "utf-8"))
+		reqFile.close()
+	def do_POST(self):
+		print(self.path)
+		if self.path == "/TILES":
+			self.send_response(200)
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+			self.wfile.write(bytes(json.dumps(newGen, cls=Status),"utf-8"))
+		elif self.path == "/SIZE":
+			self.send_response(200)
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+			self.wfile.write(bytes("[" + str(COLUMNS) + "," + str(ROWS) + "]", "utf-8"))
 import threading
 if __name__ == "__main__":        
-    webServer = HTTPServer((hostName, serverPort), MyServer)
-    print("Server started http://%s:%s" % (hostName, serverPort))
-#BEGIN: https://thispointer.com/python-how-to-create-a-thread-to-run-a-function-in-parallel/
-    th = threading.Thread(target=main)
-    th.daemon = True
-    th.start()
-#END: https://thispointer.com/python-how-to-create-a-thread-to-run-a-function-in-parallel/
-    
+	webServer = HTTPServer((hostName, serverPort), MyServer)
+	print("Server started http://%s:%s" % (hostName, serverPort))
+	#BEGIN: https://thispointer.com/python-how-to-create-a-thread-to-run-a-function-in-parallel/
+	th = threading.Thread(target=main)
+	th.daemon = True
+	th.start()
+	#END: https://thispointer.com/python-how-to-create-a-thread-to-run-a-function-in-parallel/
+	try:
+		webServer.serve_forever()
+	except KeyboardInterrupt:
+		pass
 
-    try:
-        webServer.serve_forever()
-    except KeyboardInterrupt:
-        pass
-
-    webServer.server_close()
-    print("Server stopped.")
-	
+	webServer.server_close()
+	print("Server stopped.")
 #END: https://pythonbasics.org/webserver/
-
