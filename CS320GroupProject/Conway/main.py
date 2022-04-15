@@ -13,12 +13,17 @@ from Conway.api import *
 
 ''' Import python files '''
 import time
-import json 
+import json
+from http.server import BaseHTTPRequestHandler, HTTPServer
 ''' global variables/ Macros '''
 ''' defined for simplicity in changing attributes used throughout program '''
 ROWS = 20                              #700 - temp using restrictede space
 COLUMNS = 20                           #1000 - temp using restricted space
-
+runProgram = 0
+start_flag = 0				# 0 = stop, 1 = start, 2 = pause
+algFlag = 0                 # Flag to track if first time through alg function
+endFlag = -1                # Flag used to terminate program once stable
+thread_is_alive = 0			# tracks if thread has been started
 ''' Class holding rules for current game '''
 ''' Populated by API, used by all '''
 ''' Default rules for "square cells" set initially '''
@@ -75,113 +80,68 @@ class Thoughts:
 		
 	#	cellThoughts = [ [Thoughts()] * COLUMNS for _ in range(ROWS)]
 		
-''' Main loop for Game of Life '''
+''' Game iteration (single generation) for Game of Life '''
+def game_loop():
+	global currentGeneration
+	global newGen
+	global runProgram
+	global start_flag
+	global algFlag
+	global endFlag
+	
+	while start_flag != 1:
+		# wait loop if paused or stopped
+		time.sleep(0.1)            # Sleep 100 ms
+	
+	# Get next generation of cells
+	newGen = UpdateFunction.update_generation(update, newGen, rules, cellStats)
+
+	# Check status of end flag. If stable and still life end drawing
+	# new generations (currently changes start flag to 0 ending all
+	# program cycles, but should just end getting and rendering new
+	# generations).
+	if cellStats[0][0].stableAt > 0:
+		print((f"System has reached stability in {world.gen2stable} "\
+			"generations \nand has an oscillation period of "\
+			f"{world.period}."))
+	if world.period == 1:
+		print("Still Life Found")
+		print("Terminating Program - Will hand control back to API"\
+			"in future")
+		start = 0
+	elif endFlag == -1:
+		print("Oscillating pattern has been found. Will terminate"\
+		"after 2 oscillations")
+		endFlag = 2 * world.period
+	elif endFlag > 0:
+		print(f"{endFlag} generations remain before termination")
+		endflag -= 1
+	else:
+		print("Program Terminating - will hand control back to API"
+			" in future.")
+		start = 0
+	
+	# format newGen for sending to client
+	listNewGen = []
+	for i in range(ROWS):
+		for j in range(COLUMNS):
+			listNewGen.append(newGen[i][j].status)
+			
+	response = json.dumps(listNewGen).encode('utf-8')
+	print(f"\n\n{response}\n\n")
+	socket.emit('renderGen', response)
+		
+
 def main():
 	global currentGeneration
 	global newGen
-	while 1:
-		algFlag = 0                 # Flag to track if first time through alg function
-		endFlag = -1                # Flag used to terminate program once stable
-	
-		''' Get rules and beginning currentGenerationm cell Status from API '''
-		# rules = Rules
-		# zoom = 0
-		start = 1
-		''' should be defined in API '''
-		# start = getAPIinfo(rules, currentGeneration)
-	
-		# Get random initial cell status from algorithms
-		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
-		# TEMPORARY
-		# Draw image of initial generation of cells- could be here or inside next loop
-		#UpdateFunction.draw_generation(update, currentGeneration, ROWS, COLUMNS)
-	
-		while start == 1:
-	
-			''' Get current zoom level from API for rendering '''
-			#zoom = getZoom()
 		
-			''' Update cell thought process '''
-			#if (err = updateThoughtProcess(rules, currentGeneration[i][j], cellStats[i][j], cellThoughts[i][j])) != 0:
-			''' Handle error with thought process '''
-			#print("Error with thought process. Error code {err}\n")
+	# Get random initial cell status from algorithms
+	# will be updated if user chooses specific cell layout
+	UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
 	
-			''' Render image '''
-		
-		
-			'''if (err = renderImage(rules.shape, ROWS, COLUMNS, zoom, currentGeneration)) != 0:'''
-			''' Handle error with image rendering '''
-			#print("Error with image rendering. Error code {err}\n")
-			
-			''' Update currentGeneration Status using Algorithms '''
-			#if (algorithmErr = updateStatus(rules, currentGeneration, cellStats)) != 0:
-			''' Handle error with status update '''
-			#print("Error with updating cell status. Error code {algorithmErr}\n")
-			''' Algorithms '''
-			if algFlag == 0:
-				newGen = update.update_generation(currentGeneration, rules, cellStats)
-			else:
-				newGen = UpdateFunction.update_generation(update, newGen, rules, cellStats)
-			algFlag = 1
-			# Temp render updated generation of cells
-			#UpdateFunction.draw_generation(update, newGen, ROWS, COLUMNS)
-            
-			#for x in newGen:
-			#	for y in x:
-			#		print(y.status,end="")
-			#	print()
-			
-			# Render graphics on webpage
-			updateGen(newGen)
-			
-			# Check status of end flag. If stable and still life end drawing
-			# new generations (currently changes start flag to 0 ending all
-			# program cycles, but should just end getting and rendering new 
-			# generations).  
-			if cellStats[0][0].stableAt > 0:
-				print((f"System has reached stability in {world.gen2stable} "\
-					"generations \nand has an oscillation period of "\
-					f"{world.period}."))
-				if world.period == 1:
-					print("Still Life Found")
-					print("Terminating Program - Will hand control back to API"\
-						"in future")
-					start = 0
-				elif endFlag == -1:
-					print("Oscillating pattern has been found. Will terminate"\
-						"after 2 oscillations")
-					endFlag = 2 * world.period
-				elif endFlag > 0:
-					print(f"{endFlag} generations remain before termination")
-					endflag -= 1
-				else:
-					print("Program Terminating - will hand control back to API"
-						" in future.")
-					start = 0
-		
-		
-			# temp sleep- later sleep is used for pause only
-			start = 2
-			#start = getAPIinfo(rules, currentGeneration)
-		
-			''' if start == 2 pause until "game" is resumeed '''
-			while start == 2:
-				time.sleep(0.5)          # pause 500 miliseconds
-				start = 1
-	
-		''' Exited program before stability was reached. Report error. '''
-		''' Save current game status '''
-		#if algorithmErr == 1:
-		#	print("Program exited prior to reaching stability\n")
-		#	print("Saving curent program status.\n")
-		
-		#if (err = saveProgram(rules, currentGeneration, cellStats, cellThoughts)) != 0:
-		#	''' Handle error saving game status '''
-		#	print("Error saving game. Error code {err}\n")
-	
-#if __name__ == '__main__':
-#	main()
-	
+if __name__ == '__main__':
+	socket.run(app, port = 8080)
 
 
 '''
