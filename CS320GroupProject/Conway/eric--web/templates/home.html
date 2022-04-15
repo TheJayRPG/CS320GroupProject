@@ -107,14 +107,14 @@
             <div class="leftContact">
                 <h2>Contact Us</h2>
 
-                <form>
+                <form action="" method='POST'>
                     <!--Contact form not functioning yet. Need backend to send email directly from website-->
                     <!--"mailto" hyperlink is placeholder-->
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your name">
+                    <input type="text" id="name" name="name" placeholder="Your name" required>
 
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Your email">
+                    <input type="email" id="email" name="email" placeholder="Your email" required>
 
                     <label for="message">Message</label>
                     <textarea class="messageBox" name="message" id="message" cols="30" rows="10"
@@ -122,8 +122,10 @@
 
                     <input type="submit" class="sendMessage" value="Send message">
                     <br>
-                    <a class="substButton" href="mailto:leeric678@gmail.com?subject=Message From CGOL Site User">
-                        Send message via email(placeholder)</a>
+                    {% if feedback %}
+                    <br>
+                    <p class="text-danger">{{ feedback }}</p>
+                    {% endif %}
                 </form>
             </div>
         </div>
