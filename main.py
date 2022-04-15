@@ -17,6 +17,9 @@ import json
 ''' defined for simplicity in changing attributes used throughout program '''
 ROWS = 200                              #700 - temp using restrictede space
 COLUMNS = 200                           #1000 - temp using restricted space
+start = 0								# 1 = go	2 = pause
+
+
 
 ''' Class holding rules for current game '''
 ''' Populated by API, used by all '''
@@ -85,7 +88,10 @@ def main():
 		''' Get rules and beginning currentGenerationm cell Status from API '''
 		# rules = Rules
 		# zoom = 0
-		start = 1
+		global start 
+		start = 0
+		while start == 0:
+				time.sleep(0.5)          # pause 500 miliseconds
 		''' should be defined in API '''
 		# start = getAPIinfo(rules, currentGeneration)
 	
@@ -157,13 +163,12 @@ def main():
 		
 		
 			# temp sleep- later sleep is used for pause only
-			start = 2
+			time.sleep(0.5)
 			#start = getAPIinfo(rules, currentGeneration)
 		
 			''' if start == 2 pause until "game" is resumeed '''
 			while start == 2:
 				time.sleep(0.5)          # pause 500 miliseconds
-				start = 1
 	
 		''' Exited program before stability was reached. Report error. '''
 		''' Save current game status '''
@@ -199,7 +204,7 @@ class MyServer(BaseHTTPRequestHandler):
 		self.wfile.write(bytes(reqFile.read(), "utf-8"))
 		reqFile.close()
 	def do_POST(self):
-		print(self.path)
+		#print(self.path)
 		if self.path == "/TILES":
 			self.send_response(200)
 			self.send_header("Content-type", "text/plain")
@@ -210,6 +215,17 @@ class MyServer(BaseHTTPRequestHandler):
 			self.send_header("Content-type", "text/plain")
 			self.end_headers()
 			self.wfile.write(bytes("[" + str(COLUMNS) + "," + str(ROWS) + "]", "utf-8"))
+		elif self.path == "/START":
+			global start
+			if start == 0 or start == 2:
+				start = 1
+			else:
+				start = 2
+			self.send_response(200)
+			self.send_header("Content-type", "text/plain")
+			self.end_headers()
+			self.wfile.write(bytes("DONE", "utf-8"))
+			
 import threading
 if __name__ == "__main__":        
 	webServer = HTTPServer((hostName, serverPort), MyServer)
