@@ -2,7 +2,7 @@
 ''' Custom Conway's Game of Life                                            '''
 ''' API                                                                     '''
 ''' *********************************************************************** '''
-from Conway.password import *
+PASSWORD = "p@ssw0rd_2022"
 
 from flask import Flask, request, jsonify, render_template, url_for,\
                   copy_current_request_context
@@ -69,9 +69,10 @@ def get_start_state(start):
 	# Start or Pause button pressed
 	#if request.form.get("simForm") == "START":
 	if start == "START":
-		from Conway.main import start_flag, currentGeneration, newGen
+		from Conway.main import start_flag, currentGeneration, newGen, Status
 		from Conway.main import ROWS, COLUMNS, thread_is_alive, game_loop
 		from Conway.Algorithms.alg import UpdateFunction, update
+		from Conway.Algorithms.alg import SetInitialCells, initial_cells
 		print("Start button was pressed")
 		# Pause
 		if start_flag == 1:
@@ -83,13 +84,18 @@ def get_start_state(start):
 				print("Starting game thread")
 				thread_is_alive = 1
 				
+				# temporary until start state can be loaded from website
+				SetInitialCells.cross_period3(initial_cells, currentGeneration, ROWS, COLUMNS)
+				
 				# format newGen for sending to client
 				listNewGen = []
 				for i in range(ROWS):
 					for j in range(COLUMNS):
 						listNewGen.append(currentGeneration[i][j].status)
-				print(f"\n\n{listNewGen}")
-				response = json.dumps(listNewGen).encode('utf-8')
+				print(f"\n\n{listNewGen}\n")
+				print(bytes(json.dumps(listNewGen), "utf-8"))
+				#response = json.dumps(listNewGen).encode('utf-8')
+				response = bytes(json.dumps(currentGeneration, cls=Status), "utf-8")
 				print(f"\n{response}\n\n")
 				socket.emit('renderGen', response)
 				thread = socket.start_background_task(game_loop)
