@@ -14,12 +14,7 @@ body a:hover {
 }
 
 .scripts {
-  border: 3px solid white;
-  position: absolute;
-  top: 50%;
-  left: 55%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  margin: 0 auto;
 }
 
 .sidebar {
@@ -53,29 +48,29 @@ body a:hover {
 }
 
 .sidebar h1 {
-  font-size: 30px;
+  font-size: 28px;
   text-align: center;
-  line-height: 65px;
+  line-height: 40px;
   background-color: #dd163b;
   color: white;
 }
 
 .select-shape, .select-pattern {
   text-align-last: center;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: white;
   background-color: #4d5061;
   border: none;
   outline: none;
-  border-radius: 0.25em;
+  border-radius: 0.1em;
 }
 
 .select-shape {
-  padding: 1em 2em 1em 1em;
+  padding: .7em 1.7em .7em .7em;
 }
 
 .select-pattern {
-  padding: 1em 1.67em 1em 1em;
+  padding: .7em 1.57em .7em .7em;
 }
 
 .custom-arrow {
@@ -87,7 +82,7 @@ body a:hover {
   border-top-right-radius: 0.25em;
   border-bottom-right-radius: 0.25em;
   height: 100%;
-  width: 2.5em;
+  width: 2em;
   pointer-events: none;
 }
 
@@ -117,10 +112,16 @@ body a:hover {
 }
 
 .min2Live, .max2Live, .min2Spawn, .max2Spawn {
-  width: 75%;
+  width: 3em;
+  font-color: white;
+  /*width: 75%;
   height: 30px;
   outline: none;
-  border-radius: 4px;
+  border-radius: 4px;*/
+}
+
+label {
+  color: white;
 }
 
 p {
@@ -137,13 +138,25 @@ output {
   color: white;
 }
 
-.startButton {
-  font-family: ubuntu;
-  font-size: 35px;
-  width: 6em;
-  height: 2em;
+.text-danger {
+  font-size: 1em;
   text-align: center;
-  border: 3px solid #00a884;
+  line-height: 1.1em;
+  color: white;
+  background: #dd163b;
+}
+
+.startButton, .stopButton {
+  display: inline-block;
+  font-family: ubuntu;
+  font-size: 30px;
+  width: 4em;
+  height: 1.7em;
+  text-align: center;
+}
+
+.startButton {
+  border: 2px solid #00a884;
   color: white;
   background: transparent;
   position: relative;
@@ -172,6 +185,43 @@ output {
   top: 100%;
   left: 0;
   background: #00a884;
+  z-index: -1;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+  -webkit-transition-delay: 0.2s;
+          transition-delay: 0.2s;
+}
+
+.stopButton {
+  border: 2px solid #dd163b;
+  color: white;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.stopButton:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #dd163b;
+  opacity: 0.4;
+  z-index: -1;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.startButton:after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #dd163b;
   z-index: -1;
   -webkit-transition: 0.25s;
   transition: 0.25s;
