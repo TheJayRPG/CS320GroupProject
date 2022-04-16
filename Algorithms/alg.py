@@ -2,15 +2,17 @@
 ''' Custom Conway's Game of Life                                            '''
 ''' Algorithms                                                              '''
 ''' *********************************************************************** '''
+import sys
+sys.path.append("/Users/kristinehess/Desktop/CS_320/Project_code/CS320GroupProject")
 
-from main import ROWS, COLUMNS, Status, Cell, Rules
+from Conway.main import ROWS, COLUMNS, Status, Cell, Rules
 from math import floor
 from random import randint
 
 # Class to manage Calculations about the cellular environment
 class Cells_Environment(Status):
 	# Singleton
-	gen2stable = 1
+	gen2stable = -1
 	period = -1
 	stable = -1
 	living = []
@@ -30,9 +32,13 @@ class Cells_Environment(Status):
 		# but for main to terminate if it chooses
 		if self.stable == 0:
 			return self.gen2stable;
+			
+		# IF EMPTY RETURN (PREVENT INDEX OUT OF BOUNDS ERROR)
+		if numLiving <= 0:
+			return self.gen2stable;
 	
 		# Finds Still lifes - no changes between generations
-		if changed[numChanged - 1] == None:
+		if changed[numChanged - 1] == "None":
 			self.gen2stable = numChanged - 1
 			self.stable = 0
 			self.period = 1
@@ -41,39 +47,43 @@ class Cells_Environment(Status):
 			
 		matched = [0]
 		last = numLiving - 1
-		gen2check = min(22, numLiving)    # Check up to 20 gen not
-		                                  # including last gen
-		minVal = numLiving - gen2check
+		gen2check = min(41, numLiving)    # Check for period of up to 20
+		                                  
+		minVal = numLiving - gen2check - 1
 		period = 1
+		
+		#print(f"minVal = {minVal}, gen2check = {gen2check}")
+		#print(f"index {last} = {living[last]}")
 		
 		for i in range((last - 1), minVal, -1):
 			x = all(elem in living[last] for elem in living[i])
-			# print(x)
+			#print(f"index {i} matches? {x}")
 			if x:
 				matched[0] += 1
 				matched.append(i)
 			
-		print(matched)
+		#print(f"last index = {last}, matches found at {matched}")
 		
 		if matched[0] >= 2:
 			if last - matched[1] == matched[1] - matched[2]:
 				period = last - matched[1]
 				a = last                  # index of last matched element
 				b = matched[1]            # index of previous occurrance
-				# print(f" a = {a} b = {b}")
+				#print(f" a = {a} b = {b}")
 				
 				# Checks for matches between already found matched elements
 				for gen in range(1,period):
 				
-					# print(f"Living[a] cells = {living[a-gen]}")
-					# print(f"Living[b] cells = {living[b-gen]}")
+					#print(f"Living[a] cells = {living[a-gen]}")
+					#print(f"Living[b] cells = {living[b-gen]}")
 					y = all(elem in living[a - gen] for elem in living[b-gen])
-					# print(f" a matches b = {y}")
+					#print(f" a matches b = {y}")
 					if not y:
-						print("Not Stable between matches.")
+						#print("Not Stable between matches.")
 						return -1;
 			else:
 				# Not stable
+				#print("Period not equal.")
 				return -1
 			
 			# print(f"Period of oscillation = {period}")
@@ -81,8 +91,8 @@ class Cells_Environment(Status):
 			self.stable = 0
 			self.period = period
 			
-			# print(f"Gen2stable = {self.gen2stable}")
-			# print(f"period = {self.period}")
+			#print(f"Gen2stable = {self.gen2stable}")
+			#print(f"period = {self.period}")
 			
 			return self.gen2stable;
 						
@@ -131,7 +141,7 @@ class Cells_Environment(Status):
 			self.changed.append(delta)
 			self.numChanged += 1
 		else:
-			self.changed.append(None)
+			self.changed.append("None")
 			self.numChanged += 1
 		
 		stability = world._check_if_stable(self.living, self.numLiving,
@@ -418,6 +428,7 @@ class UpdateFunction(Status, Cell, Rules):
 		    
 		if stable > 0:
 		    cellStats[0][0].stableAt = stable    # set flag- stability reached
+		    #print(f"stable. period is {world.period}")
 		    
 		return nextGen;
 	
@@ -633,6 +644,32 @@ class UpdateFunction(Status, Cell, Rules):
 				
 update = UpdateFunction(ROWS, COLUMNS)
 
-
+class SetInitialCells(Status):
+	def __init__(self, ROWS, COLUMNS):
+		self.ROWS = ROWS
+		self.COLUMNS = COLUMNS
 		
-	
+	def cross_period3(self, currentGeneration, ROWS, COLUMNS):
+		x = floor((COLUMNS - 8) / 2)
+		y = floor((ROWS - 8) / 2)
+		
+		for a in range(4):
+			currentGeneration[y][x+2+a].status = 1
+			currentGeneration[y+7][x+2+a].status = 1
+			
+		for b in range(3):
+			currentGeneration[y+2][x+b].status = 1
+			currentGeneration[y+2][x+b+5].status = 1
+			currentGeneration[y+5][x+b].status = 1
+			currentGeneration[y+5][x+b+5].status = 1
+			
+		currentGeneration[y+1][x+2].status = 1
+		currentGeneration[y+1][x+5].status = 1
+		currentGeneration[y+3][x].status = 1
+		currentGeneration[y+3][x+7].status = 1
+		currentGeneration[y+4][x].status = 1
+		currentGeneration[y+4][x+7].status = 1
+		currentGeneration[y+6][x+2].status = 1
+		currentGeneration[y+6][x+5].status = 1
+		
+initial_cells = SetInitialCells(ROWS, COLUMNS)
