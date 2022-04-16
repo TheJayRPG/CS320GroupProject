@@ -115,7 +115,7 @@
     <canvas id="glCanvas" width="400" height="400"></canvas>
 
     <!-- Get current generation of cells from the server to render-->
-    <script type="text/plain" charset="utf-8">
+    <script type="text/javascript" charset="utf-8">
       socket.on('renderGen', function(response) {
          let cells2render = JSON.parse(response);
          console.log(cells2render);
