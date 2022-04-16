@@ -15,7 +15,8 @@ function initRequestTiles() {
     }
 }
 
-/*function loadFile(filePath) {       //https://stackoverflow.com/questions/36921947/read-a-server-side-file-using-javascript
+
+function loadFile(filePath) {       //https://stackoverflow.com/questions/36921947/read-a-server-side-file-using-javascript
     var result = null;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", filePath, false);
@@ -25,7 +26,7 @@ function initRequestTiles() {
     }
     return result;
 }
-
+/*
 function getServerTiles() {
     var result = null;
     var xmlhttp = new XMLHttpRequest();

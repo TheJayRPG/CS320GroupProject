@@ -16,7 +16,7 @@
   
 </head>
 <body>
-  
+    <div style="float:right">
     <div class="sidebar"> 
         <a class="home" href="{{ url_for('home') }}">Return To Home</a>
         <h1>Rule Selections</h1>
@@ -115,7 +115,7 @@
     <canvas id="glCanvas" width="400" height="400"></canvas>
 
     <!-- Get current generation of cells from the server to render-->
-    <script type="text/javascript" charset="utf-8">
+    <script type="text/plain" charset="utf-8">
       socket.on('renderGen', function(response) {
          let cells2render = JSON.parse(response);
          console.log(cells2render);
@@ -123,13 +123,9 @@
     </script>
       
 
-    <script>
-      function renderGame() {</script>
       <p>In renderGen function in html</p>
       <canvas id="glCanvas" width="400" height="400"></canvas>
-      <script>var withinTestingEnvironment = false;
-      var wfile = {{wfile}}
-      //grid request script</script>
+      <script>var withinTestingEnvironment = false</script>
       <script src="../graphics/request.js"></script>
 
       <!-- resource scripts -->
@@ -137,7 +133,6 @@
 
       <!-- main script -->
       <script src="../graphics/build.js"></script>
-    </script>
-
+    </div>
   </body>
 </html>
