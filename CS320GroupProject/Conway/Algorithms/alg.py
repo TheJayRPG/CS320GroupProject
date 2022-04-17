@@ -649,7 +649,7 @@ class SetInitialCells(Status):
 		self.ROWS = ROWS
 		self.COLUMNS = COLUMNS
 		
-	def cross_period4(self, currentGeneration, ROWS, COLUMNS):
+	def cross_period3(self, currentGeneration, ROWS, COLUMNS):
 		x = floor((COLUMNS - 8) / 2)
 		y = floor((ROWS - 8) / 2)
 		
@@ -672,4 +672,4 @@ class SetInitialCells(Status):
 		currentGeneration[y+6][x+2].status = 1
 		currentGeneration[y+6][x+5].status = 1
 		
-	
+initial_cells = SetInitialCells(ROWS, COLUMNS)
