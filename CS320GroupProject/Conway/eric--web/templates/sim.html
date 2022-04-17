@@ -115,24 +115,32 @@
     <canvas id="glCanvas" width="400" height="400"></canvas>
 
     <!-- Get current generation of cells from the server to render-->
-    <script type="text/javascript" charset="utf-8">
+    <script>
       socket.on('renderGen', function(response) {
-         let cells2render = JSON.parse(response);
-         console.log(cells2render);
+        //console.log(response);
+        let reallyLongNameForStorageOfTile = JSON.parse(response);
+        //console.log(cells2render);
+        let a = fetch("../graphics/request.js");
+        let b = fetch("../graphics/ConwayDrawer.js");
+        let c = fetch("../graphics/build.js");
+        console.log("called js files");
       })
     </script>
       
 
-      <p>In renderGen function in html</p>
-      <canvas id="glCanvas" width="400" height="400"></canvas>
-      <script>var withinTestingEnvironment = false</script>
-      <script src="../graphics/request.js"></script>
+      <!--<p>In renderGen function in html</p>
+      <canvas id="glCanvas" width="400" height="400"></canvas>-->
+ 
+
+       <!--<script>var withinTestingEnvironment = false</script>script>-->
+       <!--<script src="../graphics/request.js"></script>-->
 
       <!-- resource scripts -->
-      <script src="../graphics/ConwayDrawer.js"></script>
+       <!--<script src="../graphics/ConwayDrawer.js"></script>-->
 
       <!-- main script -->
-      <script src="../graphics/build.js"></script>
+      <!-- <script src="../graphics/build.js"></script>-->
+  }
     </div>
   </body>
 </html>
