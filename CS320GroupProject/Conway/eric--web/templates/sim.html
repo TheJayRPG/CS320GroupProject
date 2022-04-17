@@ -76,7 +76,7 @@
         {% endif %}
         
         <br>
-        <input type="submit" name="simForm" id="simForm" value="Set Rules">
+        <input type="submit" class="submitButton" name="simForm" id="simForm" value="Set Rules">
       </form>
     
 
@@ -91,6 +91,7 @@
 
 
        <button onclick="handleStart()" class="startButton">START</button>
+       <button onclick="handlePause()" class="pauseButton">PAUSE</button>
        <button onclick="handleStop()" class="stopButton">STOP</button>
 
         <!--<input type="button" id="submitState" class="stopButton" onclick="handleSubmit(stop)" value="STOP">-->
@@ -98,6 +99,11 @@
        <script>
         function handleStart() {
           socket.emit('get_start_state', "START");
+          return false;
+        }
+
+        function handlePause() {
+          socket.emit('get_pause_state', "PAUSE");
           return false;
         }
 
