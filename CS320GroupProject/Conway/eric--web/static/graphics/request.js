@@ -1,8 +1,8 @@
 "use strict"
-let reallyLongNameForStorageOfTiles = [];
-initRequestTiles();
+//let reallyLongNameForStorageOfTiles = [];
+requestTiles();
 
-function initRequestTiles() {
+/*function initRequestTiles() {
     for(let x = 0; x < 100; x++) {
         reallyLongNameForStorageOfTiles.push([]);
         for(let y = 0; y < 100; y++) {
@@ -13,7 +13,7 @@ function initRequestTiles() {
             }
         }
     }
-}
+}*/
 
 
 function loadFile(filePath) {       //https://stackoverflow.com/questions/36921947/read-a-server-side-file-using-javascript
