@@ -77,9 +77,11 @@ def get_start_state(start):
 		# Pause
 		if start_flag == 1:
 			start_flag = 2
+			print(f"Flag = {start_flag}")
 		# Start/Restart
 		else:
 			start_flag = 1
+			print(f"Flag = {start_flag}")
 			if thread_is_alive == 0:
 				print("Starting game thread")
 				thread_is_alive = 1
@@ -92,13 +94,17 @@ def get_start_state(start):
 				for i in range(ROWS):
 					for j in range(COLUMNS):
 						listNewGen.append(currentGeneration[i][j].status)
-				print(f"\n\n{listNewGen}\n")
-				print(bytes(json.dumps(listNewGen), "utf-8"))
+				#print(f"\n\n{listNewGen}\n")
+				#print(bytes(json.dumps(listNewGen), "utf-8"))
 				#response = json.dumps(listNewGen).encode('utf-8')
-				response = bytes(json.dumps(currentGeneration, cls=Status), "utf-8")
+				#response = (json.dumps(currentGeneration, cls=Status), "utf-8")
+				response = json.dumps(currentGeneration, cls=Status)
 				print(f"\n{response}\n\n")
+				#response = response[0:1]
+				#print(f"\n{response}\n\n")
 				socket.emit('renderGen', response)
-				thread = socket.start_background_task(game_loop)
+				print("done with first emit")
+				thread = socket.start_background_task(game_loop, start_flag)
 		return render_template("sim.html")
 
 # Handle start button presses

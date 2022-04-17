@@ -81,55 +81,70 @@ class Thoughts:
 	#	cellThoughts = [ [Thoughts()] * COLUMNS for _ in range(ROWS)]
 		
 ''' Game iteration (single generation) for Game of Life '''
-def game_loop():
+def game_loop(start_flag):
+	from Conway.Algorithms.alg import UpdateFunction, update
+	from Conway.Algorithms.alg import Cells_Environment, world
+		
 	global currentGeneration
 	global newGen
 	global runProgram
-	global start_flag
+	#global start_flag
 	global algFlag
 	global endFlag
 	
-	while start_flag != 1:
-		# wait loop if paused or stopped
+	print("In game loop")
+	print(f"Flag = {start_flag}")
+	print(f"algFlag = {algFlag}, endFlag = {endFlag}")
+	
+	while start_flag == 2:
+		# wait loop if paused
 		time.sleep(0.1)            # Sleep 100 ms
+		print("In wait loop")
 	
 	# Get next generation of cells
-	newGen = UpdateFunction.update_generation(update, newGen, rules, cellStats)
+	currentGeneration = UpdateFunction.update_generation(update, currentGeneration, rules, cellStats)
 
 	# Check status of end flag. If stable and still life end drawing
 	# new generations (currently changes start flag to 0 ending all
 	# program cycles, but should just end getting and rendering new
 	# generations).
+	print(f"stable? {cellStats[0][0].stableAt}")
+	print(f"period = {world.period}")
 	if cellStats[0][0].stableAt > 0:
 		print((f"System has reached stability in {world.gen2stable} "\
 			"generations \nand has an oscillation period of "\
 			f"{world.period}."))
-	if world.period == 1:
-		print("Still Life Found")
-		print("Terminating Program - Will hand control back to API"\
-			"in future")
-		start = 0
-	elif endFlag == -1:
-		print("Oscillating pattern has been found. Will terminate"\
-		"after 2 oscillations")
-		endFlag = 2 * world.period
-	elif endFlag > 0:
-		print(f"{endFlag} generations remain before termination")
-		endflag -= 1
-	else:
-		print("Program Terminating - will hand control back to API"
-			" in future.")
-		start = 0
+		if world.period == 1:
+			print("Still Life Found")
+			print("Terminating Program - Will hand control back to API"\
+				"in future")
+			start = 0
+		elif endFlag == -1:
+			endFlag = 2 * world.period
+			print("Oscillating pattern has been found. Will terminate"\
+				  f" after 2 oscillations ({endFlag} generations).")
+			endFlag = 2 * world.period
+		elif endFlag > 0:
+			endFlag = endFlag - 1
+			print(f"{endFlag} generations remain before termination")
+		else:
+			print("Program Terminating - will hand control back to API"
+				  " in future.")
+			start_flag = 0
 	
 	# format newGen for sending to client
-	listNewGen = []
+	'''listNewGen = []
 	for i in range(ROWS):
 		for j in range(COLUMNS):
-			listNewGen.append(newGen[i][j].status)
+			listNewGen.append(newGen[i][j].status)'''
 			
-	response = json.dumps(listNewGen).encode('utf-8')
+	response = json.dumps(currentGeneration, cls=Status)
 	print(f"\n\n{response}\n\n")
 	socket.emit('renderGen', response)
+	print("done with loop emit")
+	if start_flag == 1:
+		time.sleep(0.3)
+		game_loop(start_flag)
 		
 
 def main():
