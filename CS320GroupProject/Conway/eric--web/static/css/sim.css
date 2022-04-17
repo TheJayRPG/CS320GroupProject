@@ -146,12 +146,29 @@ output {
   background: #dd163b;
 }
 
-.startButton {
+.submitButton {
   font-family: ubuntu;
-  font-size: 30px;
-  width: 5em;
+  font-size: 22px;
+  width: 6em;
   height: 1.7em;
   text-align: center;
+  border: 2px solid #9932cc;
+  color: white;
+  background: #9932cc;
+  position: relative;
+  overflow: hidden;
+}
+
+.startButton, .pauseButton, .stopButton {
+  display: inline-block;
+  font-family: ubuntu;
+  font-size: 22px;
+  width: 3.7em;
+  height: 1.7em;
+  text-align: center;
+}
+
+.startButton {
   border: 2px solid #00a884;
   color: white;
   background: transparent;
@@ -188,7 +205,91 @@ output {
           transition-delay: 0.2s;
 }
 
+.pauseButton {
+  border: 2px solid #0000cd;
+  color: white;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.pauseButton:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #000cd;
+  opacity: 0.4;
+  z-index: -1;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.pauseButton:after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #0000cd;
+  z-index: -1;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+  -webkit-transition-delay: 0.2s;
+          transition-delay: 0.2s;
+}
+
+.stopButton {
+  border: 2px solid #dd163b;
+  color: white;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.stopButton:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #dd163b;
+  opacity: 0.4;
+  z-index: -1;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.stopButton:after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #dd163b;
+  z-index: -1;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+  -webkit-transition-delay: 0.2s;
+          transition-delay: 0.2s;
+}
+
 .startButton:hover:before, .startButton:hover:after {
+  top: 0;
+  color:  #00a884;
+}
+
+.pauseButton:hover:before, .pauseButton:hover:after {
+  top: 0;
+  color: #fff;
+}
+
+.stopButton:hover:before, .stopButton:hover:after {
   top: 0;
   color: #fff;
 }
