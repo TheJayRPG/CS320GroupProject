@@ -59,9 +59,13 @@ document.addEventListener('keypress', function (event) {
     console.log(event.key + " pressed!");
 
 });
-
+let scaleDelta = 0;
 element.addEventListener('wheel', function (event) {
-    console.log('did scroll');
+    event.preventDefault();
+    console.log('did scroll ' + event.deltaY + " " + scaleDelta);
+    scaleDelta = scaleDelta + event.deltaY;
+    drawer.scaleWindow(Math.trunc(scaleDelta/100));
+    scaleDelta = scaleDelta - Math.trunc(scaleDelta/100)*100;
 });
 
 
