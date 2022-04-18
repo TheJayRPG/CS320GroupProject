@@ -1,19 +1,19 @@
 "use strict"
-//let reallyLongNameForStorageOfTiles = [];
-requestTiles();
+let reallyLongNameForStorageOfTiles = [];
+initRequestTiles();
 
-/*function initRequestTiles() {
+function initRequestTiles() {
     for(let x = 0; x < 100; x++) {
         reallyLongNameForStorageOfTiles.push([]);
         for(let y = 0; y < 100; y++) {
-            if(Math.random() >= 0.2) {
+            if(Math.random() >= 0.0) {
                 reallyLongNameForStorageOfTiles[x].push(1);
             } else {
                 reallyLongNameForStorageOfTiles[x].push(0);
             }
         }
     }
-}*/
+}
 
 
 function loadFile(filePath) {       //https://stackoverflow.com/questions/36921947/read-a-server-side-file-using-javascript
@@ -55,3 +55,16 @@ function requestTiles(minX, minY, maxX, maxY) {
     //console.log(`${result[0][0]} ${reallyLongNameForStorageOfTiles[minX][minY]}`);
     return result;
 }
+
+
+function getServerTiles(result) {
+    if(hasUpdate) {
+        reallyLongNameForStorageOfTiles = serverTiles;
+    }
+    //console.log(reallyLongNameForStorageOfTiles);
+    //console.log(reallyLongNameForStorageOfTiles);
+    //alert(reallyLongNameForStorageOfTiles);
+    return result;
+}
+
+

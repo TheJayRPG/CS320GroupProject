@@ -15,6 +15,7 @@ function draw() {
     prevTime = thisTime;
     thisTime = Date.now();
     drawer.draw( thisTime - prevTime);
+    //console.log(reallyLongNameForStorageOfTile);
 }
 
 //BEGIN: https://stackoverflow.com/questions/6042202/how-to-distinguish-mouse-click-and-drag
@@ -60,7 +61,7 @@ element.addEventListener('wheel', function (event) {
 //drawer.setMoveWindow(95,95);
 setInterval(draw, 1000/frameRate);
 //setInterval(()=>drawer.moveWindow(0,1),1000);
-//setInterval(getServerTiles, 250);
+setInterval(getServerTiles, 250);
 //window.requestAnimationFrame(()=>drawer.draw());
 function pow(a,b) {
     return a**b;
