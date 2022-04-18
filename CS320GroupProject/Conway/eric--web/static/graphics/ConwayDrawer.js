@@ -199,10 +199,10 @@ class ConwayDrawer {
     constructor(sizeX, sizeY, gridType, rangeX, rangeY) {
         this.gridType = gridType;
         this.maxX = sizeX;
-        this.posX = 0;
+        this.posX = Math.trunc(sizeX/2-rangeX/2);
         this.rangeX = rangeX;
         this.maxY = sizeY;
-        this.posY = 0;
+        this.posY = Math.trunc(sizeX/2-rangeY/2);
         this.rangeY = rangeY;
         this.netTime = 0;
         this._maskDraw = false;

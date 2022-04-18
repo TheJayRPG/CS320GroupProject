@@ -1,10 +1,15 @@
 "use strict";
 
-let ROWS = 20;
-let COLS = 20;
+function handleSize() {
+    socket.emit('get_grid_size', function(response) {
+        //console.log(response);
+        let gsize = JSON.parse(response);
+//console.log(gsize);
+let ROWS = gsize[0];
+let COLS = gsize[1];
 
 withinTestingEnvironment = false
-let drawer = new ConwayDrawer(ROWS,COLS, GRIDTYPE.SQUARE, ROWS, COLS);
+let drawer = new ConwayDrawer(ROWS,COLS, GRIDTYPE.SQUARE, 10, 10);
 
 let thisTime = Date.now();
 let prevTime
@@ -14,7 +19,9 @@ const frameRate = 60;
 function draw() {
     prevTime = thisTime;
     thisTime = Date.now();
-    drawer.draw( thisTime - prevTime);
+    if(hasUpdate) {
+        drawer.draw( thisTime - prevTime);
+    }
     //console.log(reallyLongNameForStorageOfTile);
 }
 
@@ -63,6 +70,10 @@ setInterval(draw, 1000/frameRate);
 //setInterval(()=>drawer.moveWindow(0,1),1000);
 //setInterval(getServerTiles, 250);
 //window.requestAnimationFrame(()=>drawer.draw());
+//print();
+});
+}
 function pow(a,b) {
     return a**b;
 }
+handleSize();

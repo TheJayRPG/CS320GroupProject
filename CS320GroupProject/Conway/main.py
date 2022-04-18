@@ -17,8 +17,8 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 ''' global variables/ Macros '''
 ''' defined for simplicity in changing attributes used throughout program '''
-ROWS = 20                              #700 - temp using restrictede space
-COLUMNS = 20                           #1000 - temp using restricted space
+ROWS = 200                              #700 - temp using restrictede space
+COLUMNS = 200                           #1000 - temp using restricted space
 runProgram = 0
 start_flag = 0				# 0 = stop, 1 = start, 2 = pause
 algFlag = 0                 # Flag to track if first time through alg function
