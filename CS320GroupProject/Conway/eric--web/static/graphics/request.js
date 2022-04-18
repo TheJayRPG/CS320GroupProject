@@ -1,7 +1,7 @@
 "use strict"
-let reallyLongNameForStorageOfTiles = [];
-initRequestTiles();
-
+//let reallyLongNameForStorageOfTiles = [];
+//initRequestTiles();
+/*
 function initRequestTiles() {
     for(let x = 0; x < 100; x++) {
         reallyLongNameForStorageOfTiles.push([]);
@@ -14,7 +14,7 @@ function initRequestTiles() {
         }
     }
 }
-
+*/
 
 function loadFile(filePath) {       //https://stackoverflow.com/questions/36921947/read-a-server-side-file-using-javascript
     var result = null;
@@ -48,7 +48,7 @@ function getServerTiles() {
 function requestTiles(minX, minY, maxX, maxY) {
     //console.log(`${minX} ${maxX} ${minY} ${maxY}`);
     
-    let result = reallyLongNameForStorageOfTiles
+    let result = serverTiles
         .slice(minY, maxY)
         .map(y => y.slice(minX, maxX));
     
@@ -56,7 +56,7 @@ function requestTiles(minX, minY, maxX, maxY) {
     return result;
 }
 
-
+/*
 function getServerTiles(result) {
     if(hasUpdate) {
         reallyLongNameForStorageOfTiles = serverTiles;
@@ -66,5 +66,5 @@ function getServerTiles(result) {
     //alert(reallyLongNameForStorageOfTiles);
     return result;
 }
-
+*/
 

@@ -312,7 +312,7 @@ class ConwayDrawer {
         if(this._maskDraw) return;
         this.netTime += deltaTime;
         this.gridType.DRAW(this._gl, this);
-        console.log(reallyLongNameForStorageOfTiles.flat().reduce((a,b) => a + b));
+        //console.log(reallyLongNameForStorageOfTiles.flat().reduce((a,b) => a + b));
         //requestAnimationFrame(()=> this.draw());
     }
 
