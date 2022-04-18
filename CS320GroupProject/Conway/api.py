@@ -2,7 +2,10 @@
 ''' Custom Conway's Game of Life                                            '''
 ''' API                                                                     '''
 ''' *********************************************************************** '''
-PASSWORD = 
+
+''' Requires password.py file in Conway directory containing g-mail account '''
+''' 'EMAIL' and 'PASSWORD' for use as login credentials. Email will be sent '''
+''' to address given in credentials.                                        '''
 
 from flask import Flask, request, jsonify, render_template, url_for,\
                   copy_current_request_context
@@ -12,7 +15,7 @@ from threading import Thread, Event
 from math import floor
 import json
 
-
+from Conway.password import EMAIL, PASSWORD
 from Conway.main import *
 
 # Setup basic web app
@@ -53,10 +56,10 @@ def contact_us():
 	message = request.form.get("message")
 	sendMessage = (f"Message sent from CGOL Contact Form\n{name}\n{message}")
 	server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-	server.login("contact.game.of.life.2022@gmail.com", PASSWORD)
+	server.login(EMAIL, PASSWORD)
 	server.sendmail(
 		request.form.get("email"),
-		"contact.game.of.life.2022@gmail.com",
+		EMAIL,
 		sendMessage)
 	server.quit()
 	feedback = "Thank you for contacting us."
@@ -107,16 +110,21 @@ def get_start_state(start):
 				thread = socket.start_background_task(game_loop, start_flag)
 		return render_template("sim.html")
 
-# Handle start button presses
+# Handle pause button presses
+@ socket.event
+def get_pause_state(pause):
+	from Conway.main import start_flag
+	print("Pause button was pressed")
+	start_flag = 2
+	return render_template("sim.html")# Handle start button presses
+
+# Handle stop button presses
 @ socket.event
 def get_stop_state(stop):
-	# Stop button pressed
-	#if request.form.get("simForm") == "STOP":
-	if stop == "STOP":
-		from Conway.main import start_flag
-		print("Stop button was pressed")
-		start_flag = 0
-		return render_template("sim.html")
+	from Conway.main import start_flag
+	print("Stop button was pressed")
+	start_flag = 0
+	return render_template("sim.html")
 		
 # Get rules from website
 @app.route('/sim/', methods=['POST'])
@@ -198,28 +206,3 @@ def get_rules():
 	return render_template("sim.html")
 
 
-'''# Update generation data for website rendering
-@app.route('/sim/', methods=['GET'])
-def renderGen():
-	from Conway.main import newGen, ROWS, COLUMNS
-	#self.send_response(200)
-    #self.send_header("Content-type", "text/plain")
-    #self.end_headers()
-    #print(json.dumps(newGen, cls=Status))
-	#self.wfile.write(bytes(json.dumps(newGen, cls=Status),"utf-8"))
-	listNewGen = []
-	for i in range(ROWS):
-		for j in range(COLUMNS):
-			listNewGen.append(newGen[i][j].status)
-	            
-	return Response(json.dumps(listNewGen), mimetype="/sim.html")'''
-                
-'''@app.route('/home/', methods=['POST'])
-def update_rules():
-	newRule = Rules()
-	return jsonify(newRule)'''
-	
-
-
-# threading.Thread(target=lambda: app.run(port = 8080, debug = True, use_reloader = False)).start()
-#socketio.run(app, port = 8080)
