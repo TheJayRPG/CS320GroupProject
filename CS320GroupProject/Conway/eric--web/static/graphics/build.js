@@ -39,13 +39,20 @@ element.addEventListener('mousedown', function (event) {
 element.addEventListener('mouseup', function (event) {
     const diffX = (event.pageX - startX);
     const diffY = (event.pageY - startY);
+    if(event.which == 1) {
+        if (Math.abs(diffX) < delta && Math.abs(diffY) < delta) {
+            let rect = drawer._canvas.getBoundingClientRect();
+            //console.log("click " + (event.pageX-rect.x) + ", " + (event.pageY-rect.y));
 
-    if (Math.abs(diffX) < delta && Math.abs(diffY) < delta) {
-        console.log("click");
-    } else {
-        console.log("" + Math.trunc(diffX * drawer.rangeX / 400) + " " + -Math.trunc(diffY * drawer.rangeY / 400));
-        drawer.moveWindow(-Math.trunc(diffX * drawer.rangeX / 400),Math.trunc(diffY * drawer.rangeY / 400));
-        //console.log("drag " + diffX + " " + diffY);
+            console.log("click: " + (drawer.posX+Math.trunc((event.pageX-rect.x) * drawer.rangeX / 400))%drawer.maxX+", "+(drawer.posY+drawer.rangeY-Math.trunc((event.pageY-rect.y) * drawer.rangeY / 400)-1)%drawer.maxY);
+            console.log(`[${drawer.posX},${drawer.posY}]`);
+            flipTile((drawer.posX+Math.trunc((event.pageX-rect.x) * drawer.rangeX / 400))%drawer.maxX,(drawer.posY+drawer.rangeY-Math.trunc((event.pageY-rect.y) * drawer.rangeY / 400)-1)%drawer.maxY);
+
+        } else {
+            console.log("drag: " + Math.round(diffX * drawer.rangeX / 400) + " " + -Math.round(diffY * drawer.rangeY / 400));
+            drawer.moveWindow(-Math.round(diffX * drawer.rangeX / 400),Math.round(diffY * drawer.rangeY / 400));
+            //console.log("drag " + diffX + " " + diffY);
+        }
     }
 });
 
@@ -66,6 +73,20 @@ element.addEventListener('wheel', function (event) {
     scaleDelta = scaleDelta + event.deltaY;
     drawer.scaleWindow(Math.trunc(scaleDelta/100));
     scaleDelta = scaleDelta - Math.trunc(scaleDelta/100)*100;
+});
+
+element.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+    let rect = drawer._canvas.getBoundingClientRect();
+    console.log("right click: " + (drawer.posX+Math.trunc((event.pageX-rect.x) * drawer.rangeX / 400))%drawer.maxX+", "+(drawer.posY+drawer.rangeY-Math.trunc((event.pageY-rect.y) * drawer.rangeY / 400)-1)%drawer.maxY);
+    console.log(`[${drawer.posX},${drawer.posY}]`);
+    displayStatus(event.pageX,event.pageY,(drawer.posX+Math.trunc((event.pageX-rect.x) * drawer.rangeX / 400))%drawer.maxX,(drawer.posY+drawer.rangeY-Math.trunc((event.pageY-rect.y) * drawer.rangeY / 400)-1)%drawer.maxY);
+});
+
+/* https://itnext.io/how-to-create-a-custom-right-click-menu-with-javascript-9c368bb58724 */
+document.addEventListener("click", (event) => {
+    const contextMenu = document.getElementById("context-menu");
+    contextMenu.classList.remove("visible");
 });
 
 

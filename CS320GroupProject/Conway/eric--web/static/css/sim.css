@@ -220,7 +220,7 @@ output {
   position: absolute;
   top: 100%;
   left: 0;
-  background: #000cd;
+  background: #0000cd;
   opacity: 0.4;
   z-index: -1;
   -webkit-transition: 0.2s;
@@ -294,3 +294,26 @@ output {
   color: #fff;
 }
 /*# sourceMappingURL=sim.css.map */
+
+
+/* https://itnext.io/how-to-create-a-custom-right-click-menu-with-javascript-9c368bb58724 */
+
+#context-menu {
+  position:fixed;
+  z-index: 10000;
+  width: 150px;
+  background: #1b1a1a;
+  border-radius: 5px;
+  display:none;
+}
+#context-menu .item {
+  padding: 8px 10px;
+  font-size: 15px;
+  color: #eee;
+  border-radius: inherit;
+}
+#context-menu.visible {
+  display:block;
+}
+
+

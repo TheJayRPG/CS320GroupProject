@@ -111,7 +111,25 @@
           socket.emit('get_stop_state', "STOP");
           return false;
         }
-        
+        function flipTile(x, y) {
+          socket.emit('flip_tile_at', `[${x},${y}]`);
+          //console.log(`[${x},${y}]`);
+          return false;
+        }
+        function displayStatus(mouseX,mouseY,x,y) {
+          socket.emit('get_status_at', `[${x},${y}]`, function(response) {
+            console.log(response);
+
+            const contextMenu = document.getElementById("context-menu");
+            contextMenu.style.top = mouseY;
+            contextMenu.style.left = mouseX;
+            contextMenu.classList.add("visible");
+            const contextMenuItem = contextMenu.getElementsByClassName("item")[0];
+            contextMenuItem.textContent=response;
+            
+          });
+          return false;
+        }
        </script> 
     </div>
   
@@ -154,7 +172,11 @@
 
       <!-- main script -->
       <script src="../graphics/build.js"></script>
-
+      
+      
+      <div id="context-menu">
+        <div class="item">Hello</div>
+      </div>
 
       
   
