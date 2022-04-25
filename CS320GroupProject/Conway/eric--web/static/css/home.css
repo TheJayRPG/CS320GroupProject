@@ -36,13 +36,19 @@ body {
   margin: 0;
   background-color: #1c202a;
   color: white;
+  height: 100%;
   -webkit-animation: 1.5s ease-out 0s 1 transitionDown;
           animation: 1.5s ease-out 0s 1 transitionDown;
 }
 
 .navbar {
-  background: black;
+  background: #12171c;
   padding: 1em;
+  overflow: hidden;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  z-index: 100;
 }
 
 .navbar .home {
@@ -54,7 +60,7 @@ body {
 }
 
 .navbar .home span {
-  color: var(--greenShade);
+  color: var(--blueShade);
 }
 
 .navbar nav {
@@ -75,8 +81,8 @@ body {
 }
 
 .navbar .mobileOpen:hover {
-  -webkit-filter: invert(20%) sepia(96%) saturate(5273%) hue-rotate(341deg) brightness(88%) contrast(95%);
-          filter: invert(20%) sepia(96%) saturate(5273%) hue-rotate(341deg) brightness(88%) contrast(95%);
+  -webkit-filter: invert(45%) sepia(79%) saturate(3280%) hue-rotate(177deg) brightness(97%) contrast(95%);
+          filter: invert(45%) sepia(79%) saturate(3280%) hue-rotate(177deg) brightness(97%) contrast(95%);
 }
 
 .navbar .mobileExit {
@@ -86,8 +92,8 @@ body {
 }
 
 .navbar .mobileExit:hover {
-  -webkit-filter: invert(60%) sepia(96%) saturate(5273%) hue-rotate(341deg) brightness(88%) contrast(95%);
-          filter: invert(60%) sepia(96%) saturate(5273%) hue-rotate(341deg) brightness(88%) contrast(95%);
+  -webkit-filter: invert(45%) sepia(79%) saturate(3280%) hue-rotate(177deg) brightness(97%) contrast(95%);
+          filter: invert(45%) sepia(79%) saturate(3280%) hue-rotate(177deg) brightness(97%) contrast(95%);
 }
 
 a {
@@ -102,6 +108,8 @@ ul {
 }
 
 section {
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
   padding: 5em;
 }
 
@@ -120,16 +128,16 @@ section {
 }
 
 .hero .startButton {
-  background: var(--redShade);
+  background: var(--blueShade);
   padding: 0.7em;
-  border-radius: 0.5em;
+  border-radius: 0.3em;
   display: inline-block;
-  width: 11em;
+  width: 7em;
 }
 
 .hero .startButton .ctaText {
   color: white;
-  font-size: 1.4em;
+  font-size: 2em;
   letter-spacing: 0.05em;
 }
 
@@ -157,16 +165,50 @@ ul.qualityList li:before {
   left: -2.5em;
   width: 1em;
   height: 1em;
-  -webkit-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%) url(../images/arrowhead.svg);
-          filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%) url(../images/arrowhead.svg);
-  background-image: url(../images/arrowhead.svg);
+  -webkit-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%) url("../images/arrowhead.svg");
+          filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%) url("../images/arrowhead.svg");
+  background-image: url("../images/arrowhead.svg");
   background-size: contain;
+}
+
+.gallery {
+  display: table-row;
+  white-space: nowrap;
+  overflow: hidden;
+  left: 100%;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.wrap {
+  display: table-cell;
+}
+
+.gallery img {
+  display: inline-block;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  padding: 15px;
+  height: auto;
+  width: 100px;
+}
+
+.gallery img:hover {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+
+.desc {
+  color: white;
+  bottom: 0;
+  left: 0;
 }
 
 .mainRules {
   background-color: #1c202a;
   position: relative;
-  z-index: 1;
+  z-index: -1;
 }
 
 .mainRules .mainRules li {
@@ -176,7 +218,7 @@ ul.qualityList li:before {
   border-radius: 1em;
 }
 
-.mainRules::before {
+.mainRules::after {
   content: " ";
   position: absolute;
   z-index: -1;
@@ -184,7 +226,7 @@ ul.qualityList li:before {
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.6;
+  opacity: 0.5;
   background-image: url(../images/bg_home.jpg);
   background-size: 100%;
   background-repeat: no-repeat;
@@ -283,7 +325,7 @@ nav li a {
 
 nav li a:hover {
   font-weight: bold;
-  color: var(--redShade);
+  color: var(--blueShade);
 }
 
 @media only screen and (min-width: 640px) {
@@ -331,4 +373,4 @@ nav li a:hover {
     display: flex;
   }
 }
-/*# sourceMappingURL=main.css.map */
+/*# sourceMappingURL=home.css.map */
