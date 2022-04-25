@@ -130,7 +130,7 @@ body a:hover {
 
 .min2Live, .max2Live, .min2Spawn, .max2Spawn {
  width: 3em;
- font-color: white;
+ color: white;
   /*width: 75%;
   height: 30px;
   outline: none;
