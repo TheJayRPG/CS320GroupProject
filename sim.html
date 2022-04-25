@@ -1,0 +1,368 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cell Simulation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sim.css') }}">
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+  <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+  <script type="text/javascript" charset="utf-8">
+      const socket = io();
+      socket.on('connect', function() {
+      socket.emit('my event', {data: 'I\'m connected!'});
+      });
+  </script>
+  
+</head>
+<body>
+    <div style="float:right">
+    <div class="sidebar"> 
+        <a class="home" href="{{ url_for('home') }}">Return To Home</a>
+        <h1>Rule Selections</h1>
+
+        <form id="rules" action="{{ url_for('get_rules') }}" method="post">
+
+        <div class="custom-shape"> 
+           <select class="select-shape" id="shape" name="shape"> <!--Shape select dropdown-->
+            <option value="0">Select shape:</option>
+            <option value="3">Triangle</option>
+            <option value="4">Square</option>
+            <option value="5">Pentagon</option>
+            <option value="6">Hexagon</option>
+           </select>
+           <span class="custom-arrow"></span>
+       </div>
+
+        <br> 
+        <div class="custom-pattern">
+        <select class="select-pattern" id="pattern" name="pattern"><!--Pattern select dropdown-->
+            <option value="0">Select pattern:</option>
+            <option value="1">Single layer</option>
+            <option value="2">Double layer</option>
+            <option value="3">Knight's move</option>
+        </select>
+        <span class="custom-arrow"></span>
+       </div>
+
+        <br> 
+        <div class="minLive-slider"> <!--Minimum live condition slider-->
+           <label for="min2live"><b>Mininum</b> neighbors to live: </label>
+           <input class="min2Live" type="number" id="min2live" name="min2live" value="2" min="1" max="36"> 
+       </div>
+
+        <br> 
+        <div class="maxLive-slider"> <!--Maximum live condition slider-->
+            <label for="max2live"><b>Maximum</b> neighbors to live: </label>
+            <input class="max2Live" type="number" id="max2live" name="max2live" value="3" min="1" max="36">
+        </div>
+
+        <br> 
+        <div class="minSpawn-slider"> <!--Minimum spawn condition slider-->
+            <label for="min2spawn"><b>Minimum</b> neighbors to SPAWN: </label>
+            <input class="min2Spawn" type="number" id="min2spawn" name="min2spawn" value="3" min="1" max="36">
+        </div>
+
+        
+        <br> 
+        <div class="maxSpawn-slider"> <!--Maximum spawn condition slider-->
+            <label><b>Maximum</b> neighbors to SPAWN: </label>
+            <input class="max2Spawn" type="number" id="max2spawn" name="max2spawn" value="3" min="1" max="36"> 
+        </div>
+
+        {% if feedback %}
+        <br>
+        <p class="text-danger">{{ feedback }}</p>
+        {% endif %}
+        
+        <br>
+        <input type="submit" class="submitButton" name="simForm" id="simForm" value="Set Rules">
+      </form>
+    
+
+        <br>
+        <!--Start button. Begins simulation
+        <button type="submit" id="startButton"class="startButton">START</button>-->
+      
+        <!--<form id='submitState' onsubmit="handleSubmit()">
+          <input type="submit" id="submitState" class="startButton" value="START">
+          <input type="submit" id="submitState" class="stopButton" value="STOP">
+        </form>-->
+
+
+       <button onclick="handleStart()" class="startButton">START</button>
+       <button onclick="handlePause()" class="pauseButton">PAUSE</button>
+       <button onclick="handleStop()" class="stopButton">STOP</button>
+
+        <!--<input type="button" id="submitState" class="stopButton" onclick="handleSubmit(stop)" value="STOP">-->
+
+       <script>
+        function handleStart() {
+          socket.emit('get_start_state', "START");
+          return false;
+        }
+
+        function handlePause() {
+          socket.emit('get_pause_state', "PAUSE");
+          return false;
+        }
+
+        function handleStop() {
+          socket.emit('get_stop_state', "STOP");
+          return false;
+        }
+        
+       </script> 
+    </div>
+  
+    <script>
+      let serverTiles = [];
+      let hasUpdate = false;
+      socket.on('renderGen', function(response) {
+        //console.log(response);
+        serverTiles = JSON.parse(response);
+        hasUpdate = true;
+        
+        //reallyLongNameForStorageOfTile = JSON.parse(response);
+        //console.log(response);
+        //console.log(cells2render);
+        
+        //let a = fetch("../graphics/request.js");
+        //let b = fetch("../graphics/ConwayDrawer.js");
+        //let c = fetch("../graphics/build.js");
+        //console.log("called js files");
+      })
+    </script>
+
+   
+
+    <canvas id="glCanvas" width="400" height="400"></canvas>
+
+    <!-- Get current generation of cells from the server to render-->
+    
+      
+
+      <!--<p>In renderGen function in html</p>
+      <canvas id="glCanvas" width="400" height="400"></canvas>-->
+ 
+
+       <script>var withinTestingEnvironment = false</script>
+       <script src="../graphics/request.js"></script>
+
+      <!-- resource scripts -->
+       <script src="../graphics/ConwayDrawer.js"></script>
+
+      <!-- main script -->
+      <script src="../graphics/build.js"></script>
+
+
+      
+  
+    </div>
+  </body>
+</html>
+
+<!--<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cell Simulation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sim.css') }}">
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+ <!-- <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+  <script type="text/javascript" charset="utf-8">
+      const socket = io();
+      socket.on('connect', function() {
+      socket.emit('my event', {data: 'I\'m connected!'});
+      });
+  </script>
+  
+</head>
+<body>
+    <div class="scripts">
+      <canvas id="glCanvas" width="400" height="400"></canvas>
+      <!-- Get current generation of cells from the server to render-->
+
+    
+        <!--<p>In renderGen function in html</p>
+        <canvas id="glCanvas" width="400" height="400"></canvas>-->
+ 
+
+       <!--<script>var withinTestingEnvironment = false</script>
+       <script src="../graphics/request.js"></script>
+
+      <!-- resource scripts -->
+      <!-- <script src="../graphics/ConwayDrawer.js"></script>
+
+      <!-- main script -->
+     <!-- <script src="../graphics/build.js"></script>
+    </div>
+  
+    <div class="sidebar"> 
+        <a class="home" href="{{ url_for('home') }}">Return To Home</a>
+        <h1>Rule Selections</h1>
+
+        <form id="rules" action="{{ url_for('get_rules') }}" method="post">
+
+        <div class="custom-shape"> 
+           <select class="select-shape" id="shape" name="shape"> <!--Shape select dropdown-->
+           <!-- <option value="0">Select shape:</option>
+            <option value="3">Triangle</option>
+            <option value="4">Square</option>
+            <option value="5">Pentagon</option>
+            <option value="6">Hexagon</option>
+           </select>
+           <span class="custom-arrow"></span>
+       </div>
+
+        <br> 
+        <div class="custom-pattern">
+        <select class="select-pattern" id="pattern" name="pattern"><!--Pattern select dropdown-->
+         <!--   <option value="0">Select pattern:</option>
+            <option value="1">Single layer</option>
+            <option value="2">Double layer</option>
+            <option value="3">Knight's move</option>
+        </select>
+        <span class="custom-arrow"></span>
+       </div>
+
+        <br> 
+        <div class="minLive-slider"> <!--Minimum live condition slider-->
+         <!--  <label for="min2live" class="min2live"><b>Mininum</b> neighbors to live: </label>
+           <input class="min2Live" type="number" id="min2live" name="min2live" value="2" min="1" max="36"> 
+       </div>
+
+        <br> 
+        <div class="maxLive-slider"> <!--Maximum live condition slider-->
+         <!--   <label for="max2live" class="max2live"><b>Maximum</b> neighbors to live: </label>
+            <input class="max2Live" type="number" id="max2live" name="max2live" value="3" min="1" max="36">
+        </div>
+
+        <br> 
+        <div class="minSpawn-slider"> <!--Minimum spawn condition slider-->
+        <!--    <label for="min2spawn" class="min2spawn"><b>Minimum</b> neighbors to SPAWN: </label>
+            <input class="min2Spawn" type="number" id="min2spawn" name="min2spawn" value="3" min="1" max="36">
+        </div>
+
+        
+        <br> 
+        <div class="maxSpawn-slider"> <!--Maximum spawn condition slider-->
+        <!--    <label class="max2Spawn"><b>Maximum</b> neighbors to SPAWN: </label>
+            <input class="max2Spawn" type="number" id="max2spawn" name="max2spawn" value="3" min="1" max="36"> 
+        </div>
+
+        <br>
+        <div class="cell-layout"> 
+           <select class="select-layout" id="layout" name="layout"> <!--Shape select dropdown-->
+        <!--    <option value="0">Select cell layout:</option>
+            <option value="1">Random</option>
+            <option value="2">Cross period 3</option>
+            <option value="3">Octagon period 5</option>
+            <option value="4">Kok's Galaxy period 8</option>
+            <option value="5">Custom Layout</option>
+           </select>
+           <span class="custom-arrow"></span>
+       </div>
+
+        {% if feedback %}
+        <br>
+        <p class="text-danger">{{ feedback }}</p>
+        {% endif %}
+        
+        <br>
+        <input type="submit" class="submitButton" name="simForm" id="simForm" value="Set Rules">
+      </form>
+    
+
+        <br>
+        <!--Start button. Begins simulation
+        <button type="submit" id="startButton"class="startButton">START</button>-->
+      
+        <!--<form id='submitState' onsubmit="handleSubmit()">
+          <input type="submit" id="submitState" class="startButton" value="START">
+          <input type="submit" id="submitState" class="stopButton" value="STOP">
+        </form>-->
+
+
+    <!--   <button onclick="handleStart()" class="startButton">START</button>
+       <button onclick="handlePause()" class="pauseButton">PAUSE</button>
+       <button onclick="handleStop()" class="stopButton">STOP</button>
+
+        <!--<input type="button" id="submitState" class="stopButton" onclick="handleSubmit(stop)" value="STOP">-->
+
+    <!--  <script>
+        function handleStart() {
+          socket.emit('get_start_state', "START");
+          return false;
+        }
+
+        function handlePause() {
+          socket.emit('get_pause_state', "PAUSE");
+          return false;
+        }
+
+        function handleStop() {
+          socket.emit('get_stop_state', "STOP");
+          return false;
+        }
+
+        // Get server save event
+        socket.on('save', function(response) {
+          info = JSON.parse(response);
+
+        });
+
+        function flipTile(x, y) {
+          socket.emit('flip_tile_at', `[${x},${y}]`);
+          //console.log(`[${x},${y}]`);
+          return false;
+        }
+
+        function displayStatus(mouseX,mouseY,x,y) {
+          socket.emit('get_status_at', `[${x},${y}]`, function(response) {
+            console.log(response);
+
+            const contextMenu = document.getElementById("context-menu");
+            contextMenu.style.top = mouseY;
+            contextMenu.style.left = mouseX;
+            contextMenu.classList.add("visible");
+            const contextMenuItem = contextMenu.getElementsByClassName("item")[0];
+            contextMenuItem.textContent=response;
+            
+          });
+          return false;
+        }
+       </script> 
+    </div>
+  
+    <script>
+      let serverTiles = [];
+      let hasUpdate = false;
+      socket.on('renderGen', function(response) {
+        //console.log(response);
+        serverTiles = JSON.parse(response);
+        hasUpdate = true;
+        
+        //reallyLongNameForStorageOfTile = JSON.parse(response);
+        //console.log(response);
+        //console.log(cells2render);
+        
+        //let a = fetch("../graphics/request.js");
+        //let b = fetch("../graphics/ConwayDrawer.js");
+        //let c = fetch("../graphics/build.js");
+        //console.log("called js files");
+      })
+    </script>
+
+  
+      <div id="context-menu">
+        <div class="item">Hello</div>
+      </div>
+
+      
+  
+    </div>
+  </body>
+</html>
+-->
