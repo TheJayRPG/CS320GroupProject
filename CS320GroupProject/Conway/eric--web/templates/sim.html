@@ -88,6 +88,19 @@
             <input class="max2Spawn" type="number" id="max2spawn" name="max2spawn" value="3" min="1" max="36"> 
         </div>
 
+        <br>
+        <div class="cell-layout"> 
+           <select class="select-layout" id="layout" name="layout"> <!--Shape select dropdown-->
+            <option value="0">Select cell layout:</option>
+            <option value="1">Random</option>
+            <option value="2">Cross period 3</option>
+            <option value="3">Octagon period 5</option>
+            <option value="4">Kok's Galaxy period 8</option>
+            <option value="5">Custom Layout</option>
+           </select>
+           <span class="custom-arrow"></span>
+       </div>
+
         {% if feedback %}
         <br>
         <p class="text-danger">{{ feedback }}</p>
@@ -129,11 +142,19 @@
           socket.emit('get_stop_state', "STOP");
           return false;
         }
+
+        // Get server save event
+        socket.on('save', function(response) {
+          info = JSON.parse(response);
+
+        });
+
         function flipTile(x, y) {
           socket.emit('flip_tile_at', `[${x},${y}]`);
           //console.log(`[${x},${y}]`);
           return false;
         }
+
         function displayStatus(mouseX,mouseY,x,y) {
           socket.emit('get_status_at', `[${x},${y}]`, function(response) {
             console.log(response);
