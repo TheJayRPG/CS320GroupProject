@@ -648,7 +648,15 @@ class SetInitialCells(Status):
 	def __init__(self, ROWS, COLUMNS):
 		self.ROWS = ROWS
 		self.COLUMNS = COLUMNS
+	
+	''' Not working in test?? '''
+	def blinker_period2(self, currentGeneration, ROWS, COLUMNS):
+		x = floor((COLUMNS - 1) / 2)
+		y = floor((ROWS - 2) / 2)
 		
+		currentGeneration[y][x].status = 1
+		currentGeneration[y+1][x].status = 1
+				
 	def cross_period3(self, currentGeneration, ROWS, COLUMNS):
 		x = floor((COLUMNS - 8) / 2)
 		y = floor((ROWS - 8) / 2)
@@ -672,4 +680,33 @@ class SetInitialCells(Status):
 		currentGeneration[y+6][x+2].status = 1
 		currentGeneration[y+6][x+5].status = 1
 		
+	def octagon_period5(self, currentGeneration, ROWS, COLUMNS):
+		x = floor((COLUMNS - 8) / 2)
+		y = floor((ROWS - 8) / 2)
+		
+		for a in range(8):
+			currentGeneration[y+2][x+a].status = 1
+			currentGeneration[y+5][x+a].status = 1
+			currentGeneration[y+a][x+2].status = 1
+			currentGeneration[y+a][x+5].status = 1
+			
+		currentGeneration[y+2][x+2].status = 0
+		currentGeneration[y+2][x+5].status = 0
+		currentGeneration[y+5][x+2].status = 0
+		currentGeneration[y+5][x+5].status = 0
+			
+	def koks_galaxy_period8(self, currentGeneration, ROWS, COLUMNS):
+		x = floor((COLUMNS - 9) / 2)
+		y = floor((ROWS - 9) / 2)
+		
+		for a in range(6):
+			currentGeneration[y][x+3+a].status = 1
+			currentGeneration[y+1][x+3+a].status = 1
+			currentGeneration[y+a][x].status = 1
+			currentGeneration[y+a][x+1].status = 1
+			currentGeneration[y+7][x+a].status = 1
+			currentGeneration[y+8][x+a].status = 1
+			currentGeneration[y+3+a][x+7].status = 1
+			currentGeneration[y+3+a][x+8].status = 1
+			
 initial_cells = SetInitialCells(ROWS, COLUMNS)
