@@ -348,7 +348,10 @@ class Test_integration_of_alg_functions(unittest.TestCase):
 			                  for _ in range(ROWS)]
 			
 			# Fill initial generation- Uses class SetInitialCells
-			SetInitialCells.cross_period4(self, self.curGen, ROWS, COLUMNS)
+			#SetInitialCells.cross_period3(self, self.curGen, ROWS, COLUMNS)
+			#SetInitialCells.blinker_period2(self, self.curGen, ROWS, COLUMNS) - not working?
+			#SetInitialCells.koks_galaxy_period8(self, self.curGen, ROWS, COLUMNS)
+			SetInitialCells.octagon_period5(self, self.curGen, ROWS, COLUMNS)
 		
 		# Using class UpdateFunction
 		def test_by_drawing(self):
