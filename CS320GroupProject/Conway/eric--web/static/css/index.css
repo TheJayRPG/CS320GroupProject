@@ -138,9 +138,14 @@ form {
   font-weight: bold;
 }
 
+.loginBlock .fpw {
+  line-height: 1.85em;
+}
+
 .loginBlock a {
   color: white;
   line-height: 1.35em;
+  text-decoration: none;
 }
 
 .loginBlock a:hover {
@@ -150,4 +155,4 @@ form {
 .loginBlock a.skip {
   float: right;
 }
-/*# sourceMappingURL=landing.css.map */
+/*# sourceMappingURL=index.css.map */
