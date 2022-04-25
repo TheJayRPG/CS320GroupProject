@@ -62,6 +62,45 @@
                 <li>Universal Constructor</li>
             </ul>
         </div>
+
+        <div class="gallery">
+            <div class="wrap">
+                <a href="images/Game_of_life_beacon.gif" target="_blank">
+                    <img src="images/Game_of_life_beacon.gif">
+                </a>
+                <figcaption class="desc">Beacon</figcaption>
+            </div>
+
+            <div class="wrap">
+                <a href="images/Game_of_life_blinker.gif" target="_blank">
+                    <img src="images/Game_of_life_blinker.gif">
+                </a>
+                <figcaption class="desc">Blinker</figcaption>
+            </div>
+    
+            <div class="wrap">
+                <a href="images/Game_of_life_pulsar.gif" target="_blank">
+                    <img src="images/Game_of_life_pulsar.gif">
+                </a>
+                <figcaption class="desc">Pulsar</figcaption>
+            </div>
+
+            <div class="wrap">
+                <a href="images/Game_of_life_toad.gif" target="_blank">
+                    <img src="images/Game_of_life_toad.gif">
+                </a>
+                <figcaption class="desc">Toad</figcaption>
+            </div>
+
+            <div class="wrap">
+                <a href="images/I-Column.gif" target="_blank">
+                    <img src="images/I-Column.gif">
+                </a>
+                <figcaption class="desc">I-Column</figcaption>
+            </div>
+        </div>
+
+
     </section>
 
     <section class="mainRules" id="rulesSection">
@@ -70,16 +109,24 @@
             <h2>General Rules</h2>
             <ol>
                 <li>
-                    <blockquote>Any live cell with two or three live neighbours survives.</blockquote>
+                    <blockquote> 
+                        Cells have a living condition based on the number of neighbors. 
+                        If there are too little or too many neighbors, the cell will die.
+                    </blockquote>
                 </li>
 
                 <li>
-                    <blockquote>Any dead cell with three live neighbours becomes a live cell.</blockquote>
+                    <blockquote>
+                        All other live cells die in the next generation. All other dead cells stay
+                        dead.
+                    </blockquote>
                 </li>
 
                 <li>
-                    <blockquote>All other live cells die in the next generation. All other dead cells stay
-                        dead.</blockquote>
+                    <blockquote>
+                        The user will determine the living conditions via number of neighbors for 
+                        cells to stay alive, spawn, or die.
+                    </blockquote>
                 </li>
             </ol>
 
@@ -95,7 +142,6 @@
                 We have here a simulation style game based on Conway’s Game of life,
                 built from scratch with customizable settings and rules.
                 Cells will follow a set of rules defined by the user.
-                The user will have the option to place cells and edit their behavior.
             </p>
 
 
@@ -142,6 +188,18 @@
         mobileOpen.addEventListener('click', () => { nav.classList.add('openMobNav'); })
         mobileExit.addEventListener('click', () => { nav.classList.remove('openMobNav'); })
         mobileLink.addEventListener('click', () => { nav.classList.remove('openMobNav'); })
+
+
+        window.onscroll = function() {myFunction()};
+        var navbar = document.getElementById("navbar");
+        var sticky = navbar.offsetTop;
+
+        function myFunction() {
+            if (window.pageYOffset >= sticky) {
+                navbar.classList.add("sticky");
+            }
+            else { navbar.classList.remove("sticky"); }
+        }
 
     </script>
 
