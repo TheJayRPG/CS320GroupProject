@@ -64,6 +64,15 @@ element.addEventListener('mouseup', function (event) {
 // https://www.section.io/engineering-education/keyboard-events-in-javascript/
 document.addEventListener('keypress', function (event) {
     console.log(event.key + " pressed!");
+    if(event.key == "1") {
+        drawer.swapGridType(GRIDTYPE.TEST);
+    } else if(event.key == "2") {
+        drawer.swapGridType(GRIDTYPE.SQUARE);
+    } else if(event.key == "3") {
+        drawer.swapGridType(GRIDTYPE.SQUARE_ANIM);
+    } else if(event.key == "4") {
+        drawer.swapGridType(GRIDTYPE.SQUARE_DIFF);
+    }
 
 });
 let scaleDelta = 0;

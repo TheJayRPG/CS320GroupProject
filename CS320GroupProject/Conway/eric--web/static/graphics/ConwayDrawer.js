@@ -13,7 +13,251 @@ function loadFile(filePath) {       //https://stackoverflow.com/questions/369219
 */
 
 
-const GRIDTYPE = { 
+const GRIDTYPE = {
+    SQUARE_DIFF: {
+        DRAW(gl, _thisArg) {
+            if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
+
+            gl.clearColor(0.0,0.0,0.0,1.0);
+            gl.clearDepth(1.0);
+            gl.enable(gl.DEPTH_TEST);
+            gl.depthFunc(gl.LEQUAL);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.bindBuffer(gl.ARRAY_BUFFER, _thisArg.buffers.position);
+            let numComponents = 2;
+            let type = gl.FLOAT;
+            let normalize = false;
+            let stride = 0;
+                                      
+            let offset = 0;
+            gl.vertexAttribPointer(
+                _thisArg.atPos1,
+                numComponents,
+                type,
+                normalize,
+                stride,
+                offset);
+            gl.bindTexture(gl.TEXTURE_2D, _thisArg.buffers.texture);
+            let tileState = _thisArg.getTiles();
+            const level = 0;
+            const internalFormat = gl.LUMINANCE;
+            const width = _thisArg.rangeX;
+            const height = _thisArg.rangeY;
+            const border = 0;
+            const format = gl.LUMINANCE;
+            const fType = gl.UNSIGNED_BYTE;
+            const data = new Uint8Array(tileState.flat().map((x)=>255*x));
+            //gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, _thisArg.buffers.texture);
+            gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border,
+                format, fType, data);       
+
+            
+            const alignment = 1;
+            gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); 
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);  
+            
+            if(_thisArg.prevState == undefined) {
+                _thisArg.deltaT = 1.0;
+                _thisArg.prevState = tileState;
+            } else if(_thisArg.prevState.every(function(value,index){value.every(function(value2,index2){value2 == tileState[index][index2]})})) {
+                _thisArg.deltaT = 1.0;
+            } else if(_thisArg.deltaT <= 0.0) {
+                _thisArg.deltaT = 1.0;
+                _thisArg.prevState = tileState;
+            } else {
+                _thisArg.deltaT = _thisArg.deltaT - 0.1;
+            }
+            //gl.activeTexture(gl.TEXTURE0+1);
+            gl.bindTexture(gl.TEXTURE_2D, _thisArg.buffers.pTexture);
+            const data2 = new Uint8Array(_thisArg.prevState.flat().map((x)=>255*x));
+            gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border,
+                format, fType, data2);   
+            gl.uniform1f(_thisArg.unPos1, _thisArg.deltaT);
+            gl.uniform1i(gl.getUniformLocation(_thisArg.shaderProgram, "u_texture"), 0);  // texture unit 0
+            gl.uniform1i(gl.getUniformLocation(_thisArg.shaderProgram, "p_texture"), 1);  // texture unit 1
+            
+            
+            gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); 
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);  
+            gl.enableVertexAttribArray(_thisArg.atPos1);
+            gl.useProgram(_thisArg.shaderProgram);
+            const offset2 = 0;
+            const vertexCount = 4;
+            gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+        },
+        SETUP(gl, _thisArg) {
+            if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
+            _thisArg.deltaT = -1.0;
+            let fragmentShader;
+            let vertexShader;
+            fragmentShader = loadFile("../graphics/shaders/squareDiff.frag");
+            vertexShader = loadFile("../graphics/shaders/squareDiff.vert");
+            _thisArg.shaderProgram = _thisArg._createSimpleShader(_thisArg._gl, vertexShader, fragmentShader);            
+            _thisArg.atPos1 = gl.getAttribLocation(_thisArg.shaderProgram, 'aVertexPosition');
+            //_thisArg.atPos2 = gl.getAttribLocation(_thisArg.shaderProgram, 'u_texcoord');
+            const positions = [
+                1.0,  1.0,
+               -1.0,  1.0,
+                1.0, -1.0,
+               -1.0, -1.0,
+           ];
+           const positionBuffer = gl.createBuffer();
+           gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+           gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+           
+           const textureBuffer = gl.createTexture();
+           gl.activeTexture(gl.TEXTURE0);
+           gl.bindTexture(gl.TEXTURE_2D, textureBuffer);
+           const previousBuffer = gl.createTexture();
+           gl.activeTexture(gl.TEXTURE0+1);
+           gl.bindTexture(gl.TEXTURE_2D, previousBuffer);
+           _thisArg.unPos1 = gl.getUniformLocation(_thisArg.shaderProgram, 'deltaT');
+           _thisArg.buffers = {
+               position: positionBuffer,
+               texture: textureBuffer,
+               pTexture: previousBuffer,
+            };
+        },
+        CLEAR(gl, _thisArg) {
+            if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
+            gl.deleteProgram(_thisArg.shaderProgram);
+            _thisArg.atPos1 = undefined;
+            _thisArg.unPos1 = undefined;
+            _thisArg.buffers = undefined;
+            gl.activeTexture(gl.TEXTURE0);
+        },
+    },
+    SQUARE_ANIM: {
+        DRAW(gl, _thisArg) {
+            if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
+
+            gl.clearColor(0.0,0.0,0.0,1.0);
+            gl.clearDepth(1.0);
+            gl.enable(gl.DEPTH_TEST);
+            gl.depthFunc(gl.LEQUAL);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.bindBuffer(gl.ARRAY_BUFFER, _thisArg.buffers.position);
+            let numComponents = 2;
+            let type = gl.FLOAT;
+            let normalize = false;
+            let stride = 0;
+                                      
+            let offset = 0;
+            gl.vertexAttribPointer(
+                _thisArg.atPos1,
+                numComponents,
+                type,
+                normalize,
+                stride,
+                offset);
+            gl.bindTexture(gl.TEXTURE_2D, _thisArg.buffers.texture);
+            let tileState = _thisArg.getTiles();
+            const level = 0;
+            const internalFormat = gl.LUMINANCE;
+            const width = _thisArg.rangeX;
+            const height = _thisArg.rangeY;
+            const border = 0;
+            const format = gl.LUMINANCE;
+            const fType = gl.UNSIGNED_BYTE;
+            const data = new Uint8Array(tileState.flat().map((x)=>255*x));
+            //gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, _thisArg.buffers.texture);
+            gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border,
+                format, fType, data);       
+
+            
+            const alignment = 1;
+            gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); 
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);  
+            
+            if(_thisArg.prevState == undefined) {
+                _thisArg.deltaT = 1.0;
+                _thisArg.prevState = tileState;
+            } else if(_thisArg.prevState.every(function(value,index){value.every(function(value2,index2){value2 == tileState[index][index2]})})) {
+                _thisArg.deltaT = 1.0;
+            } else if(_thisArg.deltaT <= 0.0) {
+                _thisArg.deltaT = 1.0;
+                _thisArg.prevState = tileState;
+            } else {
+                _thisArg.deltaT = _thisArg.deltaT - 0.05;
+            }
+            //gl.activeTexture(gl.TEXTURE0+1);
+            gl.bindTexture(gl.TEXTURE_2D, _thisArg.buffers.pTexture);
+            const data2 = new Uint8Array(_thisArg.prevState.flat().map((x)=>255*x));
+            gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border,
+                format, fType, data2);   
+            gl.uniform1f(_thisArg.unPos1, _thisArg.deltaT);
+            gl.uniform1i(gl.getUniformLocation(_thisArg.shaderProgram, "u_texture"), 0);  // texture unit 0
+            gl.uniform1i(gl.getUniformLocation(_thisArg.shaderProgram, "p_texture"), 1);  // texture unit 1
+            
+            
+            gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); 
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);  
+            gl.enableVertexAttribArray(_thisArg.atPos1);
+            gl.useProgram(_thisArg.shaderProgram);
+            const offset2 = 0;
+            const vertexCount = 4;
+            gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+        },
+        SETUP(gl, _thisArg) {
+            if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
+            _thisArg.deltaT = -1.0;
+            let fragmentShader;
+            let vertexShader;
+            fragmentShader = loadFile("../graphics/shaders/squareAnim.frag");
+            vertexShader = loadFile("../graphics/shaders/squareAnim.vert");
+            _thisArg.shaderProgram = _thisArg._createSimpleShader(_thisArg._gl, vertexShader, fragmentShader);            
+            _thisArg.atPos1 = gl.getAttribLocation(_thisArg.shaderProgram, 'aVertexPosition');
+            //_thisArg.atPos2 = gl.getAttribLocation(_thisArg.shaderProgram, 'u_texcoord');
+            const positions = [
+                1.0,  1.0,
+               -1.0,  1.0,
+                1.0, -1.0,
+               -1.0, -1.0,
+           ];
+           const positionBuffer = gl.createBuffer();
+           gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+           gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+           
+           const textureBuffer = gl.createTexture();
+           gl.activeTexture(gl.TEXTURE0);
+           gl.bindTexture(gl.TEXTURE_2D, textureBuffer);
+           const previousBuffer = gl.createTexture();
+           gl.activeTexture(gl.TEXTURE0+1);
+           gl.bindTexture(gl.TEXTURE_2D, previousBuffer);
+           _thisArg.unPos1 = gl.getUniformLocation(_thisArg.shaderProgram, 'deltaT');
+           _thisArg.buffers = {
+               position: positionBuffer,
+               texture: textureBuffer,
+               pTexture: previousBuffer,
+            };
+        },
+        CLEAR(gl, _thisArg) {
+            if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
+            gl.deleteProgram(_thisArg.shaderProgram);
+            _thisArg.atPos1 = undefined;
+            _thisArg.unPos1 = undefined;
+            _thisArg.buffers = undefined;
+            gl.activeTexture(gl.TEXTURE0);
+        },
+    },
     SQUARE: {
         DRAW(gl, _thisArg) {
             if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
@@ -110,11 +354,10 @@ const GRIDTYPE = {
            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
            //const conwayBuffer = gl.createBuffer();
            const textureBuffer = gl.createTexture();
-           gl.bindTexture(gl.TEXTURE_2D, _thisArg.textureBuffer);
+           gl.bindTexture(gl.TEXTURE_2D, textureBuffer);
 
            _thisArg.buffers = {
                position: positionBuffer,
-               //conway: conwayBuffer,
                texture: textureBuffer,
             };
         },
@@ -122,7 +365,6 @@ const GRIDTYPE = {
             if(typeof _thisArg === 'undefined') throw new Error("You forgot _thisArg!");
             gl.deleteProgram(_thisArg.shaderProgram);
             _thisArg.atPos1 = undefined;
-            //_thisArg.atPos2 = undefined;
             _thisArg.buffers = undefined;
         },
     },
