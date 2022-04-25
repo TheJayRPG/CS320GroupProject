@@ -15,10 +15,14 @@ from Conway.api import *
 import time
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from flask import Flask, request, jsonify, render_template, url_for,\
+                  copy_current_request_context
+from flask_socketio import SocketIO
+
 ''' global variables/ Macros '''
 ''' defined for simplicity in changing attributes used throughout program '''
-ROWS = 200                              #700 - temp using restrictede space
-COLUMNS = 200                           #1000 - temp using restricted space
+ROWS = 20                              #700 - temp using restrictede space
+COLUMNS = 20                           #1000 - temp using restricted space
 runProgram = 0
 start_flag = 0				# 0 = stop, 1 = start, 2 = pause
 algFlag = 0                 # Flag to track if first time through alg function
@@ -146,7 +150,10 @@ def game_loop(start_flag):
 		time.sleep(0.3)
 		game_loop(start_flag)
 		
-
+	if start_flag == 0:
+		stop = "STOP"
+		get_stop_state(stop)
+		
 def main():
 	global currentGeneration
 	global newGen

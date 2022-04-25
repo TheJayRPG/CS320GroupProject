@@ -74,7 +74,6 @@ def contact_us():
 def get_start_state(start):
 	print(f"\n{start}\n")
 	# Start or Pause button pressed
-	#if request.form.get("simForm") == "START":
 	if start == "START":
 		from Conway.main import start_flag, currentGeneration, newGen, Status
 		from Conway.main import ROWS, COLUMNS, thread_is_alive, game_loop
@@ -94,25 +93,14 @@ def get_start_state(start):
 				thread_is_alive = 1
 				
 				# temporary until start state can be loaded from website
-				SetInitialCells.cross_period3(initial_cells, currentGeneration, ROWS, COLUMNS)
+				#SetInitialCells.cross_period3(initial_cells, currentGeneration, ROWS, COLUMNS)
 				
-				# format newGen for sending to client
-				listNewGen = []
-				for i in range(ROWS):
-					for j in range(COLUMNS):
-						listNewGen.append(currentGeneration[i][j].status)
-				#print(f"\n\n{listNewGen}\n")
-				#print(bytes(json.dumps(listNewGen), "utf-8"))
-				#response = json.dumps(listNewGen).encode('utf-8')
-				#response = (json.dumps(currentGeneration, cls=Status), "utf-8")
 				response = json.dumps(currentGeneration, cls=Status)
 				print(f"\n{response}\n\n")
-				#response = response[0:1]
-				#print(f"\n{response}\n\n")
 				socket.emit('renderGen', response)
 				print("done with first emit")
 				thread = socket.start_background_task(game_loop, start_flag)
-		return render_template("sim.html")
+		return '', 204
 
 # Handle pause button presses
 @ socket.event
@@ -120,28 +108,37 @@ def get_pause_state(pause):
 	from Conway.main import start_flag
 	print("Pause button was pressed")
 	start_flag = 2
-	return render_template("sim.html")# Handle start button presses
+	return render_template("sim.html")
 
 # Handle stop button presses
 @ socket.event
 def get_stop_state(stop):
-	from Conway.main import start_flag
+	from Conway.main import start_flag, cellStats
 	print("Stop button was pressed")
 	start_flag = 0
-	return render_template("sim.html")
+	if cellStats[0][0].stableAt > 0:
+		print("Stability has been reached.")
+		thread.join()
+	# Not stable- start save function
+	else:
+		socket.emit('save', response)
+		# implement save function
+		
+	
+	return '', 204
 
 
 # Get grid size for sim
 @ socket.event
 def get_grid_size():
 	from Conway.main import ROWS,COLUMNS
-	return f"[{ROWS},{COLUMNS}]"
-
+	socket.emit('get_grid_size',[{ROWS},{COLUMNS}])
 
 # Get rules from website
 @app.route('/sim/', methods=['POST'])
 def get_rules():
-	from Conway.main import rules
+	from Conway.main import rules, currentGeneration, COLUMNS, ROWS, Status
+	from Conway.Algorithms.alg import UpdateFunction, SetInitialCells, initial_cells, update
 	args = request.form
 	max = 36
 	rules.shape = args.get("shape", type=int, default=4)
@@ -155,6 +152,10 @@ def get_rules():
 	rules.max2live = args.get("max2live", type=int, default=3)
 	rules.min2spawn = args.get("min2spawn", type=int, default=3)
 	rules.max2spawn = args.get("max2spawn", type=int, default=3)
+	
+	startCells = args.get("layout", type=int, default=1)
+	if startCells == 0:
+		startCells = 1
 	
 	print(f"\n\nRules = {rules.shape}, {rules.pattern}, {rules.min2live},"
 	      f"{rules.min2spawn}\n\n")
@@ -215,6 +216,33 @@ def get_rules():
 		feedback2 = "Minimum values must be smaller than maximum values."
 		return render_template("sim.html",feedback=feedback2)
 		
-	return render_template("sim.html")
+	# Set start cells and display on website
+	# Random
+	if startCells == 1:
+		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
+		
+	# Cross
+	elif startCells == 2:
+		SetInitialCells.cross_period3(initial_cells, currentGeneration, ROWS, COLUMNS)
+	
+	# Octagon
+	elif startCells == 3:
+		SetInitialCells.octagon_period5(initial_cells, currentGeneration, ROWS, COLUMNS)
+	
+	# Kok's Galaxy
+	elif startCells == 4:
+		SetInitialCells.koks_galaxy_period8(initial_cells, currentGeneration, ROWS, COLUMNS)
+	
+	# Custom Layout from User
+	else:
+		# get cells from website
+		# Temporary while not set up
+		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
+		
+	response = json.dumps(currentGeneration, cls=Status)
+	socket.emit('renderGen', response)
+		
+	return '', 204
+
 
 
