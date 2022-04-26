@@ -39,6 +39,11 @@ thread_stop_event = Event()
 def login():
     return render_template("index.html")
 
+@app.route('/createAccount/', methods=['GET'])
+def createAccount():
+	return render_template("createAccount.html")
+
+
 @app.route('/home/', methods=['GET'])
 def home():
 	return render_template("home.html")
