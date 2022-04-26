@@ -1,7 +1,7 @@
 "use strict";
 
 function handleSize() {
-    socket.on('get_grid_size', function(response) {
+    socket.emit('get_grid_size', function(response) {
         //console.log(response);
         let gsize = JSON.parse(response);
 //console.log(gsize);

@@ -132,7 +132,7 @@ def get_stop_state(stop):
 @ socket.event
 def get_grid_size():
 	from Conway.main import ROWS,COLUMNS
-	socket.emit('get_grid_size',[{ROWS},{COLUMNS}])
+	return f"[{ROWS},{COLUMNS}]"
 
 # Get rules from website
 @app.route('/sim/', methods=['POST'])
