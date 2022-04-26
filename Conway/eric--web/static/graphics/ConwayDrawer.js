@@ -587,5 +587,3 @@ class ConwayDrawer {
         return shaderProgram;
     }
 }
-
-

@@ -67,4 +67,3 @@ function getServerTiles(result) {
     return result;
 }
 */
-
