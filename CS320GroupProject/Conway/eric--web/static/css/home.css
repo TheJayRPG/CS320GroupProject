@@ -324,6 +324,12 @@ nav li a:hover {
   color: var(--blueShade);
 }
 
+@media (max-width: 640px) {
+  .gallery {
+    display: none;
+  }
+}
+
 @media only screen and (min-width: 640px) {
   .mobileOpen, .mobileExit {
     display: none;
