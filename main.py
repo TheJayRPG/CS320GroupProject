@@ -170,10 +170,11 @@ def main():
 		#if algorithmErr == 1:
 		#	print("Program exited prior to reaching stability\n")
 		#	print("Saving curent program status.\n")
-		
-		#if (err = saveProgram(rules, currentGeneration, cellStats, cellThoughts)) != 0:
-		#	''' Handle error saving game status '''
-		#	print("Error saving game. Error code {err}\n")
+		#new code comment out if breaks
+		filename = "filename"
+		if (err = saveProgram(filename,rules, currentGeneration, cellStats, cellThoughts)) != 0:
+			#Handle error saving game status
+			print("Error saving game. Error code {err}\n")
 	
 #if __name__ == '__main__':
 #	main()
