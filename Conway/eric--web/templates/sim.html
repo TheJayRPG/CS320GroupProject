@@ -140,7 +140,7 @@
 
         // Start termination sequence
         socket.on('terminate', function(response) {
-          msg = json.parse(response);
+          msg = JSON.parse(response);
           var printMsg;
           if(msg.stable > 0) {
             alert("Stability has been reached\n It took ${msg.gen2stable} generations to reach stability.\nThe period of oscillation is ${msg.period} generations.");
