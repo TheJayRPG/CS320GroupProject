@@ -172,13 +172,9 @@ ul.qualityList li:before {
 }
 
 .gallery {
-  display: table-row;
-  white-space: nowrap;
-  overflow: hidden;
-  left: 100%;
-  position: relative;
+  margin: auto;
+  width: 28%;
   text-align: center;
-  width: 100%;
 }
 
 .wrap {
