@@ -306,7 +306,7 @@ class UpdateFunction(Status, Cell, Rules):
 						(1,2), (3,1), (4,0)]
 				# House pointing to right
 				if (i % 4 == 1 and j % 2 == 0) or (i % 4 == 3 and j % 2 == 1):
-					more = [(0,1)]
+				    more = [(0,1)]
 				# House pointing to left
 				else:
 					more = [(0,-1)]
@@ -427,10 +427,10 @@ class UpdateFunction(Status, Cell, Rules):
 		    nextGen)
 		    
 		if stable > 0:
-			cellStats[0][0].stableAt = stable    # set flag- stability reached
-			#print(f"stable. period is {world.period}")
-			
-		return nextGen
+		    cellStats[0][0].stableAt = stable    # set flag- stability reached
+		    #print(f"stable. period is {world.period}")
+		    
+		return nextGen;
 	
 
 	# Method to randomly generate initial cell population
