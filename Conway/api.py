@@ -19,8 +19,8 @@ from Conway.password import EMAIL, PASSWORD
 from Conway.main import *
 
 # Setup basic web app
-app = Flask(__name__, static_url_path='', template_folder="eric--web/templates", static_folder='eric--web/static')
-'''static_url_path='/Users/kristinehess/Desktop/CS_320/Project_code/Github_Code/eric--web')'''
+app = Flask(__name__, static_url_path='', template_folder=
+     "eric--web/templates", static_folder='eric--web/static')
 app.config['SECRET_KEY'] = 'secret!'
 app.config["DEBUG"] = True
 app.config["JSON_SORT_KEYS"] = False
@@ -82,7 +82,7 @@ def get_start_state(start):
 		print("Start button was pressed")
 		# Pause
 		if start_flag == 1:
-			start_flag = 2
+			#start_flag = 2- implemented pause button instead
 			print(f"Flag = {start_flag}")
 		# Start/Restart
 		else:
@@ -115,8 +115,10 @@ def get_stop_state(stop):
 	from Conway.Algorithms.alg import UpdateFunction, update, initial_cells
 	print("Stop button was pressed")
 	start_flag = 0
-	response = json.dumps(world, cls=Cells_Environment)
-	print("Seding terminating stats.")
+	#response = json.dumps(world, cls=Cells_Environment)
+	print(f"Seding terminating stats. stable = {world.stable}, gen ="
+	      f" {world.gen2stable}, period = {world.period}")
+	response = [world.stable, world.gen2stable, world.period]
 	socket.emit('terminate', response)
 	
 	# Not stable- start save function
@@ -191,16 +193,20 @@ def get_grid_size():
 	return f"[{ROWS},{COLUMNS}]"
 	
 # Receive client request for cell thoughts and return
+# Didn't get necessary code until morning of presentation.
+# Error when importing in line 202 (Alex_ThoughtProcess)
 @ socket.event
 def get_status_at(list):
-	x = list[0]
-	y = list[1]
-	#from Conway.Alex_ThoughtProcess import
+	row = list[0]
+	col = list[1]
+	#from Conway.Alex_ThoughtProcess.cellTP import History, Log, recordCell
 	#call function with x, y values of cell
+	#cell = recordCell(col, row, currentGeneration)
 	# have it return string to return to client
 	return "This is what cell {x}, {y} is thinking."
 
 # Get rules from website
+# Error when importing in line 216 (dennis_save_file)
 @app.route('/sim/', methods=['POST'])
 def get_rules():
 	from Conway.main import start_flag, Cell, cellStats, Rules, rules
@@ -286,30 +292,62 @@ def get_rules():
 		feedback2 = "Minimum values must be smaller than maximum values."
 		return render_template("sim.html",feedback=feedback2)
 		
+	# Clear currentGeneration 'array' to avoid having multiple layouts
+	# loaded together
+	for i in range(ROWS):
+		for j in range(COLUMNS):
+			currentGeneration[i][j].status = 0
+		
 	# Set start cells and display on website
 	# Random
 	if startCells == 1:
-		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
+		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2),
+		                             floor(COLUMNS/2))
 		
 	# Cross
 	elif startCells == 2:
-		SetInitialCells.cross_period3(initial_cells, currentGeneration, ROWS, COLUMNS)
+		SetInitialCells.blinker_period2(initial_cells, currentGeneration,
+										ROWS, COLUMNS)
+		
+	# Cross
+	elif startCells == 3:
+		SetInitialCells.cross_period3(initial_cells, currentGeneration,
+									  ROWS, COLUMNS)
 	
 	# Octagon
-	elif startCells == 3:
-		SetInitialCells.octagon_period5(initial_cells, currentGeneration, ROWS, COLUMNS)
+	elif startCells == 4:
+		SetInitialCells.octagon_period5(initial_cells, currentGeneration,
+		                                ROWS, COLUMNS)
 	
 	# Kok's Galaxy
-	elif startCells == 4:
-		SetInitialCells.koks_galaxy_period8(initial_cells, currentGeneration, ROWS, COLUMNS)
+	elif startCells == 5:
+		SetInitialCells.koks_galaxy_period8(initial_cells, currentGeneration,
+		                                    ROWS, COLUMNS)
+		
+	# Bi-Loaf- Splits into 2 gliders
+	elif startCells == 6:
+		SetInitialCells.bi_loaf(initial_cells, currentGeneration, ROWS,
+		                        COLUMNS)
+		
+	# 4-8-12 Diamond ~ Splits into multiple gliders
+	elif startCells == 7:
+		SetInitialCells.diamond(initial_cells, currentGeneration, ROWS,
+		                        COLUMNS)
+		
+	# Glider Gun
+	elif startCells == 8:
+		SetInitialCells.gosper_gun(initial_cells, currentGeneration, ROWS,
+		                           COLUMNS)
 	
 	# Custom Layout from User
-	elif startCells == 5:
+	elif startCells == 9:
 		# get cells from website
 		# Temporary while not set up
-		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2), floor(COLUMNS/2))
+		UpdateFunction.generate_rand(update, currentGeneration, floor(ROWS/2),
+									 floor(COLUMNS/2))
 		
 	# Get saved Game
+	# Error on import- unable to test if code works
 	else:
 		def returnFile(filename):
 			file = filename
@@ -330,6 +368,7 @@ def get_rules():
 				cellStats[x][y].stableAt = -1
 				
 				currentGeneration[x][y].status = 0
+		
 		world.gen2stable = -1
 		world.period = -1
 		world.stable = -1
