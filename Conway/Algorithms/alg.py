@@ -3,13 +3,14 @@
 ''' Algorithms                                                              '''
 ''' *********************************************************************** '''
 import sys
-sys.path.append("/Users/kristinehess/Desktop/CS_320/Project_code/CS320GroupProject")
+sys.path.append("/Users/kristinehess/Desktop/CS_320/Project_code/"
+				"CS320GroupProject")
 
 from Conway.main import ROWS, COLUMNS, Status, Cell, Rules
 from math import floor
 from random import randint
 
-# Class to manage Calculations about the cellular environment
+''' Class to manage Calculations about the cellular environment.           '''
 class Cells_Environment(Status):
 	# Singleton
 	gen2stable = -1
@@ -21,9 +22,10 @@ class Cells_Environment(Status):
 	numChanged = 0
 
 
-	# Internal function to check if stability has been reached and if there is
-	# a period of oscillation returns -1, -1 if not stable and generations to
-	# reach stability and period if stable. A period of 1 is a still life
+	''' Internal function to check if stability has been reached and if    '''
+	''' there is a period of oscillation returns -1, -1 if not stable and  '''
+	''' generations to reach stability and period if stable. A period of 1 '''
+	''' is a still life                                                    '''
 	def _check_if_stable(self, living, numLiving, changed, numChanged):
 	
 		# Stability has already been obtained and reported
@@ -99,12 +101,12 @@ class Cells_Environment(Status):
 		return -1;
 
 
-	# Function called from UpdateFunction. Used to update the cell's
-	# environment object. Calls on _check_if_stable for stability and period
-	# of oscillation and passes return value onto its caller. Return value
-	# stability is a tuple containing the number of generations to reach
-	# stability (-1 if not stable) and the period of oscillation (1 if still
-	# life, -1 if not stable)
+	''' Function called from UpdateFunction. Used to update the cell's    '''
+	''' environment object. Calls on _check_if_stable for stability and   '''
+	''' period of oscillation and passes return value onto its caller.    '''
+	''' Return value stability is a tuple containing the number of        '''
+	''' generations to reach stability (-1 if not stable) and the period  '''
+	''' of oscillation (1 if still life, -1 if not stable)                '''
 	def update_environment(self, currentGeneration, nextGen):
 	
 		alive = []
@@ -148,13 +150,11 @@ class Cells_Environment(Status):
 		    self.changed, self.numChanged)
 		    
 		return stability;
-			
 
 world = Cells_Environment()
 
-
-# Return nextGen of cells and update cellStats array with info abour the
-# new generation
+''' Return nextGen of cells and update cellStats array with info about the '''
+''' new generation                                                         '''
 class UpdateFunction(Status, Cell, Rules):
 	def __init__(self, ROWS, COLUMNS):
 		self.ROWS = ROWS
@@ -162,8 +162,9 @@ class UpdateFunction(Status, Cell, Rules):
 		#self.new = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
 		#self.returnVal = -1
 		
-	# Get list of a cells neighbors (coefficients of (i,j)) by rule being
-	#followed
+	''' Internal fundtion used to get list of a cells neighbors (the       '''
+	''' coefficients of (i,j)) by the rules being followed. Neighbors      '''
+	''' may depend on position of initial cell in addition to rules.       '''
 	def _get_neighbor_type(self, i, j, shape, pattern):
 
 		# Triangle Shape
@@ -184,10 +185,10 @@ class UpdateFunction(Status, Cell, Rules):
 			# Double layer of neighbors = 36
 			elif pattern == 2:
 				neighborhood = [(-2,-2), (-2,-1), (-2,0), (-2,1), (-2,2),
-					(-1,-3), (-1,-2), (-1,-1), (-1,0), (-1,1), (-1,2), (-1,3),
-					(0,-4), (0,-3), (0,-2), (0,-1), (0,1), (0,2), (0,3), (0,4),
-					(1,-3), (1,-2), (1,-1), (1,0), (1,1), (1,2), (1,3), (2,-2),
-					(2,-1), (2,0), (2,1), (2,2)]
+					(-1,-3), (-1,-2), (-1,-1), (-1,0), (-1,1), (-1,2),
+					(-1,3), (0,-4), (0,-3), (0,-2), (0,-1), (0,1), (0,2),
+					(0,3), (0,4), (1,-3), (1,-2), (1,-1), (1,0), (1,1),
+					(1,2), (1,3), (2,-2), (2,-1), (2,0), (2,1), (2,2)]
 				# Downward/Even Triangle
 				if i + j % 2 == 0:
 					more = [(-2,-3), (-2, 3), (-1,-4), (-1,4)]
@@ -198,8 +199,8 @@ class UpdateFunction(Status, Cell, Rules):
 				
 			# Knights move neighbors = 11
 			elif pattern == 3:
-				neighborhood =[(-2,-1), (-2,1), (-1,-2), (-1,2), (0,-2), (0,2),
-					(1,-2), (1,2), (2,-1), (2,1)]
+				neighborhood =[(-2,-1), (-2,1), (-1,-2), (-1,2), (0,-2),
+				     (0,2), (1,-2), (1,2), (2,-1), (2,1)]
 				# Downward/Even Triangle
 				if i + j % 2 == 0:
 					more = [(1,0)]
@@ -218,8 +219,8 @@ class UpdateFunction(Status, Cell, Rules):
 			
 			# Immediate neighbors (1 layer) = 8
 			if pattern == 1:
-				neighborhood = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1),
-					(1,0), (1,1)]
+				neighborhood = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1),
+				     (1,-1), (1,0), (1,1)]
 				
 			# Double layer of neighbors = 24
 			elif pattern == 2:
@@ -334,8 +335,8 @@ class UpdateFunction(Status, Cell, Rules):
 			# Double layer of neighbors = 18
 			elif pattern == 2:
 				neighborhood = [(-1,-2), (-1,-1), (-1,0), (-1,1), (-1,2),
-					(0,-2), (0,-1), (0,1), (0,2), (1,-2), (1,-1), (1,0), (1,1),
-					(1,2)]
+					(0,-2), (0,-1), (0,1), (0,2), (1,-2), (1,-1), (1,0),
+					(1,1), (1,2)]
 				#Even Hexagon
 				if (i + j) % 2 == 0:
 					more = [(-2,-1), (-2,0), (-2,1), (2,0)]
@@ -362,7 +363,9 @@ class UpdateFunction(Status, Cell, Rules):
 				return -1
 					
 		return neighborhood
-					
+	
+	''' Internal function that also uses neighborhood function in          '''
+	''' calculating the number of living neighbors for the target cell.    '''
 	def _count_neighbors(self, currentGeneration, i, j, rules):
 
 		count = 0
@@ -386,8 +389,8 @@ class UpdateFunction(Status, Cell, Rules):
 
 		return count
 
-	# Use rules to determine if each cell in currentGeneration has enough
-	# neighbors to live. Create and return new array for nextGen
+	''' Use rules to determine if each cell in currentGeneration has       '''
+	''' enough neighbors to live. Create and return new array for nextGen  '''
 	def update_generation(self, currentGeneration, rules, cellStats):
 
 		# New array to hold status of next generation cells
@@ -427,13 +430,13 @@ class UpdateFunction(Status, Cell, Rules):
 		    nextGen)
 		    
 		if stable > 0:
-		    cellStats[0][0].stableAt = stable    # set flag- stability reached
+		    cellStats[0][0].stableAt = stable  # set flag- stability reached
 		    #print(f"stable. period is {world.period}")
 		    
 		return nextGen;
 	
 
-	# Method to randomly generate initial cell population
+	''' Method to randomly generate initial cell population                '''
 	def generate_rand(self, currentGeneration, height, width):
 		
 		corner_i = floor((ROWS - height) / 2)
@@ -446,7 +449,7 @@ class UpdateFunction(Status, Cell, Rules):
 				if rand_num == 1:
 					currentGeneration[corner_i + i][corner_j + j].status = 1
 					
-	# Method to draw currentGeneration for testing
+	''' Method to draw currentGeneration for testing                       '''
 	def draw_generation(self, currentGeneration, ROWS, COLUMNS):
 			
 		for i in range(ROWS):
@@ -457,7 +460,7 @@ class UpdateFunction(Status, Cell, Rules):
 					print("_", end = ' ')
 			print("")
 			
-	# Method to show the neighbors of a cell (visualization)
+	''' Method to show the neighbors of a cell (visualization)             '''
 	def show_neighbors(self, row, column, shape, pattern):
 	
 		width = height = 16
@@ -644,18 +647,19 @@ class UpdateFunction(Status, Cell, Rules):
 				
 update = UpdateFunction(ROWS, COLUMNS)
 
+''' Class used to define preset initial cell layouts for use in website     '''
 class SetInitialCells(Status):
 	def __init__(self, ROWS, COLUMNS):
 		self.ROWS = ROWS
 		self.COLUMNS = COLUMNS
 	
-	''' Not working in test?? '''
 	def blinker_period2(self, currentGeneration, ROWS, COLUMNS):
 		x = floor((COLUMNS - 1) / 2)
-		y = floor((ROWS - 2) / 2)
+		y = floor((ROWS - 3) / 2)
 		
 		currentGeneration[y][x].status = 1
 		currentGeneration[y+1][x].status = 1
+		currentGeneration[y+2][x].status = 1
 				
 	def cross_period3(self, currentGeneration, ROWS, COLUMNS):
 		x = floor((COLUMNS - 8) / 2)
@@ -708,5 +712,68 @@ class SetInitialCells(Status):
 			currentGeneration[y+8][x+a].status = 1
 			currentGeneration[y+3+a][x+7].status = 1
 			currentGeneration[y+3+a][x+8].status = 1
+	
+	''' Bi-laof splits into 2 gliders headed in opposite directions        '''
+	def bi_loaf(self, currentGeneration, ROWS, COLUMNS):
+		x = floor((COLUMNS - 4) / 2)
+		y = floor((ROWS - 7) / 2)
+		
+		for a in range(2):
+			currentGeneration[y+3][x+1+a].status = 1
+			currentGeneration[y+4+a][x].status = 1
+			currentGeneration[y+1+a][x+3].status = 1
 			
+		currentGeneration[y][x+2].status = 1
+		currentGeneration[y+1][x+1].status = 1
+		currentGeneration[y+2][x+0].status = 1
+		currentGeneration[y+6][x+1].status = 1
+		currentGeneration[y+5][x+2].status = 1
+		currentGeneration[y+4][x+3].status = 1
+		
+	''' 4-8-12 Diamond splits into 4 gliders                               '''
+	def diamond(self, currentGeneration, ROWS, COLUMNS):
+		x = floor((COLUMNS - 12) / 2)
+		y = floor((ROWS - 9) / 2)
+		
+		for a in range(4):
+			currentGeneration[y][x+4+a].status = 1
+			currentGeneration[y+8][x+4+a].status = 1
+		
+		for b in range(8):
+			currentGeneration[y+2][x+2+b].status = 1
+			currentGeneration[y+6][x+2+b].status = 1
+			
+		for c in range(12):
+			currentGeneration[y+4][x+c].status = 1
+			
+	''' Gosper Glider Gun - stable system to create infinite gliders       '''
+	def gosper_gun(self, currentGeneration, ROWS, COLUMNS):
+		x = floor((COLUMNS - 36) / 2)
+		y = floor((ROWS - 8) / 2)
+		
+		for a in range(2):
+			currentGeneration[y+4][x+a].status = 1
+			currentGeneration[y+5][x+a].status = 1
+			currentGeneration[y+2][x+12+a].status = 1
+			currentGeneration[y+8][x+12+a].status = 1
+			currentGeneration[y+a][x+24].status = 1
+			currentGeneration[y+5+a][x+24].status = 1
+			currentGeneration[y+2][x+34+a].status = 1
+			currentGeneration[y+3][x+34+a].status = 1
+						
+		for b in range(3):
+			currentGeneration[y+4+b][x+10].status = 1
+			currentGeneration[y+4+b][x+16].status = 1
+			currentGeneration[y+2+b][x+20].status = 1
+			currentGeneration[y+2+b][x+21].status = 1
+			
+		currentGeneration[y+3][x+11].status = 1
+		currentGeneration[y+7][x+11].status = 1
+		currentGeneration[y+5][x+14].status = 1
+		currentGeneration[y+3][x+15].status = 1
+		currentGeneration[y+7][x+15].status = 1
+		currentGeneration[y+5][x+17].status = 1
+		currentGeneration[y+1][x+22].status = 1
+		currentGeneration[y+5][x+22].status = 1
+						
 initial_cells = SetInitialCells(ROWS, COLUMNS)
