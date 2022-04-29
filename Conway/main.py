@@ -1,7 +1,8 @@
 ''' ********************************************************* '''
 ''' Custom Conway's Game of Life                              '''
 '''                                                           '''
-''' Python version 3.9??                                      '''
+''' Python version 3.9                                        '''
+''' Requires flask and socketio                               '''
 ''' Designed using State Pattern                              '''
 ''' ********************************************************* '''
 
@@ -21,13 +22,14 @@ from flask_socketio import SocketIO
 
 ''' global variables/ Macros '''
 ''' defined for simplicity in changing attributes used throughout program '''
-ROWS = 200                              #700 - temp using restrictede space
-COLUMNS = 200                           #1000 - temp using restricted space
+ROWS = 40                              #700 - temp using restrictede space
+COLUMNS = 40                           #1000 - temp using restricted space
 runProgram = 0
 start_flag = 0				# 0 = stop, 1 = start, 2 = pause
 algFlag = 0                 # Flag to track if first time through alg function
 endFlag = -1                # Flag used to terminate program once stable
 thread_is_alive = 0			# tracks if thread has been started
+
 ''' Class holding rules for current game '''
 ''' Populated by API, used by all '''
 ''' Default rules for "square cells" set initially '''
@@ -76,6 +78,7 @@ currentGeneration = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
 newGen = [[ Status() for j in range(COLUMNS)] for _ in range(ROWS)]
 
 ''' Structur to hold cell thoughts '''
+# Alex created new classes instead of implementing this one
 class Thoughts:
 	pass
 	#def_init_(self):
@@ -171,6 +174,8 @@ if __name__ == '__main__':
 	socket.run(app, port = 8080)
 
 
+# This code is not being used currently. It still exists here so it can be used
+# easily by it's author for code count 
 '''
 #BEGIN: https://pythonbasics.org/webserver/
 from http.server import BaseHTTPRequestHandler, HTTPServer
