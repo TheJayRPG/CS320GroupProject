@@ -349,11 +349,12 @@ class Test_integration_of_alg_functions(unittest.TestCase):
 			
 			# Fill initial generation- Uses class SetInitialCells
 			#SetInitialCells.cross_period3(self, self.curGen, ROWS, COLUMNS)
-			#SetInitialCells.blinker_period2(self, self.curGen, ROWS, COLUMNS) - not working?
+			SetInitialCells.blinker_period2(self, self.curGen, ROWS, COLUMNS)
 			#SetInitialCells.koks_galaxy_period8(self, self.curGen, ROWS, COLUMNS)
-			SetInitialCells.octagon_period5(self, self.curGen, ROWS, COLUMNS)
+			#SetInitialCells.octagon_period5(self, self.curGen, ROWS, COLUMNS)
+			#SetInitialCells.diamond(self, self.curGen, ROWS, COLUMNS)
+			#SetInitialCells.bi_loaf(self, self.curGen, ROWS, COLUMNS)
 		
-		# Using class UpdateFunction
 		def test_by_drawing(self):
 			UpdateFunction.draw_generation(self, self.curGen, ROWS, COLUMNS)
 		
@@ -375,5 +376,76 @@ class Test_integration_of_alg_functions(unittest.TestCase):
 		# fails
 		'''def test_check_values(self):
 			self.assertEqual(world.period, 3, f"Error, period = {world.period} expected period == 3.")'''
+
+''' Test to check initial layout of cells for correctness '''
+class Test_initial_layout(unittest.TestCase):
+			
+		def setUp(self):
+			# Setup empty 'arrays' and default rules
+			# Classes defined in main
+			self.curGen = [[ Status() for j in range(COLUMNS)]
+			               for _ in range(ROWS)]
+			self.newGen = [[ Status() for j in range(COLUMNS)]
+			               for _ in range(ROWS)]
+			self.rules = Rules(ROWS, COLUMNS)
+			self.cellStats = [[ Cell() for j in range(COLUMNS)]
+			                  for _ in range(ROWS)]
+								
+		def test_blinker(self):
+			for i in range(ROWS):
+				for j in range(COLUMNS):
+					self.curGen[i][j].status = 0
+			print("Blinker")
+			SetInitialCells.blinker_period2(self, self.curGen, ROWS, COLUMNS)
+			UpdateFunction.draw_generation(self, self.curGen, ROWS, COLUMNS)
+			
+		def test_cross(self):
+			for i in range(ROWS):
+				for j in range(COLUMNS):
+					self.curGen[i][j].status = 0
+			print("Cross")
+			SetInitialCells.cross_period3(self, self.curGen, ROWS, COLUMNS)
+			UpdateFunction.draw_generation(self, self.curGen, ROWS, COLUMNS)
+			
+		def test_octagon(self):
+			for i in range(ROWS):
+				for j in range(COLUMNS):
+					self.curGen[i][j].status = 0
+			print("Octagon")
+			SetInitialCells.octagon_period5(self, self.curGen, ROWS, COLUMNS)
+			UpdateFunction.draw_generation(self, self.curGen, ROWS, COLUMNS)
+			
+		def test_koks_galaxy(self):
+			for i in range(ROWS):
+				for j in range(COLUMNS):
+					self.curGen[i][j].status = 0
+			print("Kok's Galaxy")
+			SetInitialCells.koks_galaxy_period8(self, self.curGen, ROWS, COLUMNS)
+			UpdateFunction.draw_generation(self, self.curGen, ROWS, COLUMNS)
+			
+		def test_bi_loaf(self):
+			for i in range(ROWS):
+				for j in range(COLUMNS):
+					self.curGen[i][j].status = 0
+			print("Bi-loaf")
+			SetInitialCells.bi_loaf(self, self.curGen, ROWS, COLUMNS)
+			UpdateFunction.draw_generation(self, self.curGen, ROWS, COLUMNS)
+
+		def test_diamond(self):
+			for i in range(ROWS):
+				for j in range(COLUMNS):
+					self.curGen[i][j].status = 0
+			print("Diamond")
+			SetInitialCells.diamond(self, self.curGen, ROWS, COLUMNS)
+			UpdateFunction.draw_generation(self, self.curGen, ROWS, COLUMNS)
+			
+		def test_glider_gun(self):
+			for i in range(ROWS):
+				for j in range(COLUMNS):
+					self.curGen[i][j].status = 0
+			print("Gosper Glider Gun")
+			SetInitialCells.gosper_gun(self, self.curGen, ROWS, COLUMNS)
+			UpdateFunction.draw_generation(self, self.curGen, ROWS, COLUMNS)
+			
 			
 			
