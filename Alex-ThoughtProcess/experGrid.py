@@ -1,50 +1,57 @@
 """
 Alexander Hong
 CS 320
-Experimental Grid
+https://github.com/TheJayRPG/CS320GroupProject
+Custom Game of Life - Experimental Grid
+experGrid.py
 
 This is a Python based version of Conway's Game of Life used for quickly
 testing features and experimenting with miscellaneous implementations.
 
 While in the directory the program is stored in,
-it can be run from the terminal by typing:
+the program can be run from the terminal by typing:
     python3 experGrid.py
 
 Command prompts will be provided for user input.
 """
-
+import experRule
 import time
 import random
 
-# Class used to store data on a rule
-# Range indicates how far a cell detects other cells around it during updates
-# Most is the maximum number of nearby cells required for being alive
-# Least is the minimum number of nearby cell required for being alive
-class Rule():
-    def __init__(self, range, most, least):
-        self.r = range #1
-        self.m = most #3
-        self.l = least #2
 
-# Class used to store data on a cell's position and status
-# xpos and ypos indicate the cell's position on a 2D grid
-# status indicates being dead (0) or alive (1)
+"""
+Cell
+
+Class used to store data on a cell's position and status.
+    x           Integer representing the x position of the cell.
+    y           Integer representing the y position of the cell.
+    status      Integer indicating being dead (0) or alive (1).
+"""
 class Cell():
     def __init__(self, xpos, ypos, status):
         self.x = xpos
         self.y = ypos
         self.s = status
 
-    # Toggles a cell from being dead to alive, or alive to dead
+    """
+    cellToggle
+
+    Toggles a cell from being dead to alive, or alive to dead.
+    """
     def cellToggle(self):
         if self.s == 1:
             self.s = 0
         else:
             self.s = 1
 
-# Class used to store the information of cell on a 2D grid
-# Width and height are the dimensions of the grid
-# self.grid is an array used to hold rows of cells
+"""
+CellGrid
+
+Class used to store the information of cell on a 2D grid.
+    w       Integer representing the width of the grid.
+    h       Integer representing the height of the grid.
+    grid    An array used to hold rows of cells.
+"""
 class CellGrid():
     def __init__(self, width, height):
         self.w = width
@@ -52,7 +59,11 @@ class CellGrid():
         self.grid = []
         self.newGrid()
 
-    # Creates a new grid full of dead cells
+    """
+    newGrid
+
+    Creates a new grid full of dead cells.
+    """
     def newGrid(self):
         self.grid = []
         for y in range(self.h):
@@ -61,7 +72,11 @@ class CellGrid():
                 row.append(Cell(x, y, 0))
             self.grid.append(row)
 
-    # Prints a visualization of the grid into the terminal
+    """
+    printGrid
+
+    Prints a visualization of the grid into the terminal.
+    """
     def printGrid(self):
         for y in range(self.h):
             print("|", end = '')
@@ -72,7 +87,11 @@ class CellGrid():
                     print("0|", end = '')
             print()
 
-    # Randomizes the cells on a grid given a probability out of 100
+    """
+    randomGrid
+
+    Randomizes the cells on a grid given a probability out of 100.
+    """
     def randomGrid(self, prob):
         for y in range(self.h):
             for x in range(self.w):
@@ -80,7 +99,11 @@ class CellGrid():
                 if chance <= prob:
                     self.grid[y][x].s = 1
 
-    # Updates all the cells on a grid in accordance to a rule
+    """
+    updateGrid
+
+    Updates all the cells on a grid in accordance to a rule
+    """
     def updateGrid(self, rule):
         temp = CellGrid(self.w, self.h)
         for y in range(self.h):
@@ -108,22 +131,59 @@ class CellGrid():
                         temp.grid[y][x].s = 1
         self.grid = temp.grid
 
-# Determines if a given input is a valid integer
+        """
+        updateGridD(self, rule)
+
+        Updates all cells on, searching in a diamond pattern instead of square.
+        """
+        def updateGridD(self, rule):
+            temp = CellGrid(self.w, self.h)
+            for y in range(self.h):
+                for x in range(self.w):
+                    nearby = 0
+                    for j in range(rule.r + 1):
+                        for i in range(j + 1):
+                            print("Reached j: " + str(j) + " i: " + str(i))
+            self.grid = temp.grid
+
+"""
+intValid
+
+Determines if a given input is a valid integer.
+"""
 def intValid(dim):
     result = 0
     while 1:
         try:
             result = int(dim)
-            if result > 0:
+            if result >= 0:
                 break
         except:
             pass
         dim = input("Enter a valid integer: ")
     return result
 
-# Determines input commands
+"""
+intValid2
+
+Determines if a given input is valid with out using user input.
+"""
+def intValid2(dim):
+    result = -1
+    if type(dim) == int:
+        print("Passed")
+        result = dim
+        if result < 0 or result >= 100:
+            return -1
+    return result
+
+"""
+comInput
+
+Determines input commands
+"""
 def comInput(grid, rule):
-    print("Commands: quit|q, next|n, rand|r, ")
+    print("Commands: quit|q, next|n, rand|r, toggle|t, ")
     inp = input("Enter command: ")
 
     if inp == "next" or inp == "n":
@@ -145,17 +205,41 @@ def comInput(grid, rule):
         print()
         return grid
 
+    if inp == "toggle" or inp == "t":
+        print("Give the location of a cell...")
+        xpos = 0
+        ypos = 0
+        while 1:
+            xpos = input("Enter an X between 0 and " + str(grid.w) + ": ")
+            xpos = intValid(xpos)
+            if xpos >= 0 and xpos < grid.w:
+                break
+        while 1:
+            ypos = input("Enter an Y between 0 and " + str(grid.h) + ": ")
+            ypos = intValid(ypos)
+            if ypos >= 0 and ypos < grid.h:
+                break
+
+        grid.grid[ypos][xpos].cellToggle()
+        grid.printGrid()
+        print()
+        return grid
+
     if inp == "quit" or inp == "q":
         return 0
 
     else:
         return -1
 
-# Currently performs a series of test functions:
-# Prompts the user for grid dimensions
-# Displays a randomized grid using the given dimensions
-# Attempts to update the grid using CGoL default rules
-# Displays commands to the user and prompts an input
+"""
+main
+
+Currently performs a series of test functions:
+Prompts the user for grid dimensions
+Displays a randomized grid using the given dimensions
+Attempts to update the grid using CGoL default rules
+Displays commands to the user and prompts an input
+"""
 def main():
     width = intValid(input("Enter grid width: "))
     height = intValid(input("Enter grid height: "))
@@ -163,7 +247,7 @@ def main():
 
     cGrid.printGrid()
     print()
-    testRule = Rule(1, 3, 2)
+    testRule = experRule.Rule(1, 3, 2)
 
     while 1:
         inp = comInput(cGrid, testRule)
