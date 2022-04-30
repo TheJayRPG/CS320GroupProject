@@ -31,8 +31,8 @@ class TPCell():
         self.age = a
         self.status = s
         self.nearby = n
-    	self.liveNear = ln
-    	self.deadNear = dn
+        self.liveNear = ln
+        self.deadNear = dn
         self.history = h
 
     """
@@ -48,7 +48,7 @@ class TPCell():
         cellInfo += "  Living: " + str(self.liveNear) + "\n"
         cellInfo += "  Dead: " + str(self.deadNear) + "\n"
         statDict = {0: "Dead", 1: "Alive"}
-        cellInfo += "  Status: " + statDict.get(self.status, "Other"))
+        cellInfo += "  Status: " + statDict.get(self.status, "Other")
         return cellInfo
 
     """
@@ -85,8 +85,8 @@ class Log():
         self.age = cell.age
         self.status = cell.status
         self.nearby = cell.nearby
-    	self.liveNear = cell.liveNear
-    	self.deadNear = cell.deadNear
+        self.liveNear = cell.liveNear
+        self.deadNear = cell.deadNear
         self.prev = None
         self.change = False
 
@@ -113,7 +113,7 @@ class Log():
         logInfo += "  Living: " + str(self.liveNear) + "\n"
         logInfo += "  Dead: " + str(self.deadNear) + "\n"
         statDict = {0: "Dead", 1: "Alive"}
-        logInfo += "  Status: " + statDict.get(self.status, "Other"))
+        logInfo += "  Status: " + statDict.get(self.status, "Other")
         return logInfo
 
 """
