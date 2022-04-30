@@ -8,7 +8,7 @@ cellTP.py
 This file provides the classes used to store information on a selected cell's
 changes and the observations it makes to surrounding cells.
 To be used from main.py via import.
-For independent testing, import into cellTPView.py
+For examining method results, import into cellTPView.py
 """
 
 """
@@ -42,12 +42,12 @@ class TPCell():
     """
     def strInfo(self):
         cellInfo = ""
-        cellInfo += "[" + str(self.xPos) + ", " + str(self.yPos) + "]\n"
+        cellInfo += "  [" + str(self.xPos) + ", " + str(self.yPos) + "]\n"
         cellInfo += "  Age: " + str(self.age) + "\n"
         cellInfo += "  Nearby: " + str(self.nearby) + "\n"
         cellInfo += "  Living: " + str(self.liveNear) + "\n"
         cellInfo += "  Dead: " + str(self.deadNear) + "\n"
-        statDict = {0: "Dead", 1: "Alive"}
+        statDict = {0: "Dead", 1: "Live"}
         cellInfo += "  Status: " + statDict.get(self.status, "Other")
         return cellInfo
 
@@ -58,7 +58,7 @@ class TPCell():
     """
     def historySize(self):
         if self.history != None:
-            return self.history.size
+            return self.history.getSize()
 
     """
     historyInfo
@@ -66,7 +66,10 @@ class TPCell():
     Returns the history object's info as a string.
     """
     def historyInfo(self):
-        return self.history.strInfo()
+        if self.history != None:
+            return self.history.strInfo()
+        else:
+            return "    Nothing in history\n"
 
 """
 Log
@@ -105,15 +108,19 @@ class Log():
 
     Provides a simplified version of the log info in string format.
     """
-    def strInfo():
-        logInfo = ""
-        logInfo += "[" + str(cell.xPos) + ", " + str(cell.yPos) + "]\n"
-        logInfo += "  Age: " + str(self.age) + "\n"
-        logInfo += "  Nearby: " + str(self.nearby) + "\n"
-        logInfo += "  Living: " + str(self.liveNear) + "\n"
-        logInfo += "  Dead: " + str(self.deadNear) + "\n"
-        statDict = {0: "Dead", 1: "Alive"}
-        logInfo += "  Status: " + statDict.get(self.status, "Other")
+    def strInfo(self):
+        logInfo = "  ["
+        logInfo += str(self.age) + "]"
+        logInfo += " N: " + str(self.nearby)
+        logInfo += " L: " + str(self.liveNear)
+        logInfo += " D: " + str(self.deadNear)
+        statDict = {0: " Dead", 1: " Live"}
+        logInfo += statDict.get(self.status, "Other")
+        if self.prev != None:
+            logInfo += " > [" + str(self.prev.age) + "]"
+        if self.change != False:
+            logInfo += " CHANGE"
+        logInfo += "\n"
         return logInfo
 
 """
@@ -141,8 +148,9 @@ class History():
 
     Recreates the history record by iterating through the 10 most recent logs.
     """
-    def updateRecord():
+    def updateRecord(self):
         log = self.recent
+        log.changeCheck()
         newRecord = []
         for a in range(10):
             newRecord.append(log)
@@ -162,18 +170,17 @@ class History():
         self.recent = newLog
         if self.size < 10:
             self.size += 1
-        updateRecord()
+        self.updateRecord()
 
     """
     strInfo
 
     Provides a string version of each log in the record array.
     """
-    def strInfo():
+    def strInfo(self):
         hisInfo = ""
-        for log in record:
-            hisInfo += log.strInfo()
-            hisInfo += "\n"
+        for log in self.record:
+            hisInfo += "  " + log.strInfo()
         return hisInfo
 
 """
@@ -189,3 +196,4 @@ def recordCell(x, y, cellArray):
     cell.history = History(cellLog)
 
     return cell
+
