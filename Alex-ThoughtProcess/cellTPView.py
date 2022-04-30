@@ -38,7 +38,7 @@ Prints the log data held within the history object.
 """
 def showHistoryView(history):
     print("--History Info--")
-    print(history.strInfo() + "\n")
+    print(history.strInfo())
 
 """
 main
