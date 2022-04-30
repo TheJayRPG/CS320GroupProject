@@ -13,4 +13,6 @@ def create_file_name(shape, occurence):
         return filename
     else:
         filename = "file_" + str(occurence)
+        return filename
+
 
