@@ -48,9 +48,9 @@ class TestSuite(unittest.TestCase):
         self.assertEqual(count, 0, "Should be 0 dead cells")
 
     """
-    The following 4 tests provide total Path coverage of intValid.
+    The following 4 tests provide total Path coverage of intValid2.
 
-    def intValid(dim):
+    def intValid2(dim):
         result = -1
         if type(dim) == int:
             result = dim
@@ -59,45 +59,45 @@ class TestSuite(unittest.TestCase):
         return result
 
     test_int_char
-    Also an acceptance test for intValid
+    Also an acceptance test for intValid2
 
     test_int_low
-    Also an acceptance test for intValid
+    Also an acceptance test for intValid2
 
     test_int_high
-    Also an acceptance test for intValid
+    Also an acceptance test for intValid2
 
     test_int_valid
-    Also an acceptance test for intValid
+    Also an acceptance test for intValid2
 
     test_int_zero
-    Acceptance test for intValid for equivalence partition
+    Acceptance test for intValid2 for equivalence partition
 
     test_int_hundred
-    Acceptance test for intValid for equivalence partition
+    Acceptance test for intValid2 for equivalence partition
     """
     def test_int_char(self):
-        result = experGrid.intValid('a')
+        result = experGrid.intValid2('a')
         self.assertEqual(result, -1, "Should be -1")
 
     def test_int_low(self):
-        result = experGrid.intValid(-2)
+        result = experGrid.intValid2(-2)
         self.assertEqual(result, -1, "Should be -1")
 
     def test_int_high(self):
-        result = experGrid.intValid(110)
+        result = experGrid.intValid2(110)
         self.assertEqual(result, -1, "Should be -1")
 
     def test_int_valid(self):
-        result = experGrid.intValid(40)
+        result = experGrid.intValid2(40)
         self.assertEqual(result, 40, "Should be 40")
 
     def test_int_zero(self):
-        result = experGrid.intValid(0)
+        result = experGrid.intValid2(0)
         self.assertEqual(result, 0, "Should be 0")
 
     def test_int_hundred(self):
-        result = experGrid.intValid(100)
+        result = experGrid.intValid2(100)
         self.assertEqual(result, -1, "Should be -1")
 
     """
