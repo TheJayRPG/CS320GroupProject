@@ -128,6 +128,9 @@ History
 
 Class used for recording the throught process history of a cell using logs.
 Holds the 10 most recent logs of a cell.
+    size        Integer representing the numver of logs stored in the History.
+    recent      The most recent log recorded.
+    record      An array of the 10 most recent logs.
 """
 class History():
     def __init__(self, recentLog):
@@ -196,4 +199,3 @@ def recordCell(x, y, cellArray):
     cell.history = History(cellLog)
 
     return cell
-
